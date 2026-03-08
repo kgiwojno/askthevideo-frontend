@@ -30,7 +30,14 @@ const ThinkingIndicator = () => (
   </div>
 );
 
-const WelcomeScreen = () => (
+const EXAMPLE_PROMPTS = [
+  "Summarize this video",
+  "What are the key points?",
+  "Explain the main argument",
+  "List all topics covered",
+];
+
+const WelcomeScreen = ({ onSelectPrompt }: { onSelectPrompt: (text: string) => void }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -61,6 +68,20 @@ const WelcomeScreen = () => (
             {item.label}
           </div>
         ))}
+      </div>
+      <div className="mt-6">
+        <p className="text-xs text-muted-foreground mb-2">Try asking:</p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {EXAMPLE_PROMPTS.map((prompt) => (
+            <button
+              key={prompt}
+              onClick={() => onSelectPrompt(prompt)}
+              className="text-xs px-3 py-1.5 rounded-full border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors cursor-pointer"
+            >
+              {prompt}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   </motion.div>
@@ -157,7 +178,7 @@ const ChatArea = ({
 
       {/* Messages or Welcome */}
       {!hasVideos && messages.length === 0 ? (
-        <WelcomeScreen />
+        <WelcomeScreen onSelectPrompt={(text) => setInput(text)} />
       ) : (
         <div className="flex-1 overflow-y-auto py-4">
           <AnimatePresence>
