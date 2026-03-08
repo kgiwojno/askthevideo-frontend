@@ -193,7 +193,7 @@ const AppSidebar = ({
         {/* Links */}
         <div className="px-5 py-3 space-y-2">
           <a
-            href="https://buymeacoffee.com/placeholder"
+            href="https://buymeacoffee.com/kgiw"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-xs text-accent hover:underline transition-colors"
