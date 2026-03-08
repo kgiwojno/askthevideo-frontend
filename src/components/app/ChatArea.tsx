@@ -59,14 +59,17 @@ const WelcomeScreen = ({ onSelectPrompt }: { onSelectPrompt: (text: string) => v
           { icon: "📝", label: "Get summaries with timestamps" },
           { icon: "🔍", label: "Search across multiple videos" },
           { icon: "⚡", label: "Instant AI-powered answers" },
-        ].map((item) => (
-          <div
+        ].map((item, i) => (
+          <motion.div
             key={item.label}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.3 + i * 0.1 }}
             className="bg-card border border-border rounded-card p-3 text-xs text-muted-foreground flex items-start gap-2"
           >
             <span className="text-base shrink-0">{item.icon}</span>
             {item.label}
-          </div>
+          </motion.div>
         ))}
       </div>
       <div className="mt-6">
