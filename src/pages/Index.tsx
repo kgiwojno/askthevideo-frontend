@@ -78,12 +78,21 @@ const Index = () => {
         setQuestionsRemaining((prev) => Math.max(0, prev - 1));
       }
 
-      // Simulate AI response
+      // Simulate AI response with varied answers
+      const responses = [
+        `Great question! At [2:14-3:45](https://youtu.be/example?t=134), the speaker breaks down how attention mechanisms allow models to focus on relevant parts of the input sequence.\n\nThere's also a key insight at [7:22](https://youtu.be/example?t=442) about positional encoding — without it, transformers wouldn't understand word order at all. This directly relates to "${text.slice(0, 40)}".`,
+        `Here's what I found across your videos:\n\nThe section at [1:30-2:50](https://youtu.be/example?t=90) covers the difference between supervised and unsupervised learning with clear visual examples.\n\nLater at [5:48](https://youtu.be/example?t=348), the presenter demonstrates how reinforcement learning agents explore vs exploit — a fascinating tradeoff relevant to your question about "${text.slice(0, 40)}".`,
+        `Based on the video content:\n\nAt [4:05-5:30](https://youtu.be/example?t=245), the speaker explains why large language models sometimes "hallucinate" — generating plausible but incorrect information.\n\nThe discussion at [10:12](https://youtu.be/example?t=612) about RLHF (Reinforcement Learning from Human Feedback) shows how this problem is being addressed. Your question about "${text.slice(0, 40)}" connects well to this.`,
+        `Interesting question! The video addresses this at [0:45-2:10](https://youtu.be/example?t=45), where the host explains tokenization — how raw text is split into subword units before being processed.\n\nAt [6:33](https://youtu.be/example?t=393), there's a deep dive into embedding spaces and how semantically similar words end up near each other in vector space. This is core to understanding "${text.slice(0, 40)}".`,
+        `I found several relevant sections:\n\nAt [3:20](https://youtu.be/example?t=200), the video explains the concept of transfer learning — training on one task and applying knowledge to another.\n\nThe most relevant part for your question is at [9:05-10:40](https://youtu.be/example?t=545), where fine-tuning techniques like LoRA are demonstrated, showing how to adapt large models efficiently for "${text.slice(0, 40)}".`,
+        `Here's a summary related to your question:\n\nThe segment at [1:15-3:00](https://youtu.be/example?t=75) provides an excellent overview of convolutional neural networks and how they detect patterns in images layer by layer.\n\nAt [8:42](https://youtu.be/example?t=522), the speaker compares CNNs to Vision Transformers (ViTs), arguing the latter may eventually replace convolutions entirely. This ties into "${text.slice(0, 40)}".`,
+      ];
+      const responseIndex = Math.floor(Math.random() * responses.length);
       setTimeout(() => {
         const assistantMsg: ChatMessage = {
           id: crypto.randomUUID(),
           role: "assistant",
-          content: `Based on the selected videos, here's what I found:\n\nThe key concept discussed at [3:00-4:30](https://youtu.be/example?t=180) is that neural networks learn through backpropagation. The speaker explains the gradient descent process in detail.\n\nAdditionally, at [8:15](https://youtu.be/example?t=495), the learning rate and its impact on model convergence are covered. This ties directly to your question about "${text.slice(0, 50)}".`,
+          content: responses[responseIndex],
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, assistantMsg]);
