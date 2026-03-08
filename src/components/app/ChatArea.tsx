@@ -88,21 +88,22 @@ const WelcomeScreen = ({ onSelectPrompt }: { onSelectPrompt: (text: string) => v
           ))}
         </motion.div>
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.4 }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1, delayChildren: 1.0 } } }}
+          initial="hidden"
+          animate="show"
           className="mt-6"
         >
-          <p className="text-xs text-muted-foreground mb-2">Try asking:</p>
+          <motion.p variants={fadeUp} className="text-xs text-muted-foreground mb-2">Try asking:</motion.p>
           <div className="flex flex-wrap justify-center gap-2">
             {EXAMPLE_PROMPTS.map((prompt) => (
-              <button
+              <motion.button
                 key={prompt}
+                variants={fadeUp}
                 onClick={() => onSelectPrompt(prompt)}
                 className="text-xs px-3 py-1.5 rounded-full border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors cursor-pointer"
               >
                 {prompt}
-              </button>
+              </motion.button>
             ))}
           </div>
         </motion.div>
