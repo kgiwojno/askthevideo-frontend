@@ -2,8 +2,10 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { Video, ChatMessage, Limits } from "@/types/app";
 import { apiCall, apiStreamCall } from "@/lib/api";
 import AppSidebar from "@/components/app/AppSidebar";
+import MobileSidebarDrawer from "@/components/app/MobileSidebarDrawer";
 import ChatArea from "@/components/app/ChatArea";
 import ConnectionStatus from "@/components/app/ConnectionStatus";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 
 const DEFAULT_LIMITS: Limits = {
@@ -15,6 +17,7 @@ const DEFAULT_LIMITS: Limits = {
 };
 
 const Index = () => {
+  const isMobile = useIsMobile();
   const [videos, setVideos] = useState<Video[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoadingVideo, setIsLoadingVideo] = useState(false);
@@ -272,21 +275,24 @@ const Index = () => {
     );
   }
 
+  const sidebarProps = {
+    videos,
+    onLoadVideo: handleLoadVideo,
+    onRemoveVideo: handleRemoveVideo,
+    onToggleVideo: handleToggleVideo,
+    questionsRemaining: isUnlimited ? Infinity : questionsRemaining,
+    isUnlimited,
+    isLoadingVideo,
+    onSubmitAccessKey: handleSubmitAccessKey,
+    limits,
+  };
+
   return (
     <div className="flex flex-col h-screen bg-background overflow-hidden">
       <ConnectionStatus isOffline={isOffline} />
+      {isMobile && <MobileSidebarDrawer {...sidebarProps} />}
       <div className="flex flex-1 overflow-hidden">
-        <AppSidebar
-          videos={videos}
-          onLoadVideo={handleLoadVideo}
-          onRemoveVideo={handleRemoveVideo}
-          onToggleVideo={handleToggleVideo}
-          questionsRemaining={isUnlimited ? Infinity : questionsRemaining}
-          isUnlimited={isUnlimited}
-          isLoadingVideo={isLoadingVideo}
-          onSubmitAccessKey={handleSubmitAccessKey}
-          limits={limits}
-        />
+        {!isMobile && <AppSidebar {...sidebarProps} />}
         <ChatArea
           messages={messages}
           onSendMessage={handleSendMessage}

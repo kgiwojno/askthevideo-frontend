@@ -48,7 +48,7 @@ const AppSidebar = ({
   const videoLimitReached = !isUnlimited && videos.length >= videosMax;
 
   return (
-    <aside className="w-[300px] min-w-[300px] h-screen bg-card border-r border-border flex flex-col overflow-hidden">
+    <aside className="w-[300px] min-w-[300px] h-screen bg-card border-r border-border flex flex-col overflow-hidden max-md:w-full max-md:min-w-0 max-md:border-r-0">
       {/* Logo */}
       <div className="p-5 pb-3">
         <h1 className="text-xl font-bold tracking-tight flex items-center gap-2">
