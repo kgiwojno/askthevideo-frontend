@@ -196,7 +196,7 @@ const AppSidebar = ({
             href="https://buymeacoffee.com/kgiw"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-xs text-accent hover:underline transition-colors"
+            className="flex items-center gap-2 text-xs text-primary hover:underline transition-colors"
           >
             <Coffee className="w-3.5 h-3.5" />
             Buy Me a Coffee
