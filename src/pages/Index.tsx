@@ -232,7 +232,8 @@ const Index = () => {
           if (err?.code === "QUESTION_LIMIT") {
             setLimits((prev) => ({ ...prev, questions_used: prev.questions_max ?? 10 }));
           }
-        }
+        },
+        controller.signal
       );
     },
     []
