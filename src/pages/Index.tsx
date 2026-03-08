@@ -266,7 +266,7 @@ const Index = () => {
 
   if (isInitializing) {
     return (
-      <div className="flex h-screen bg-background items-center justify-center">
+      <div className="flex h-dvh bg-background items-center justify-center">
         <div className="text-center">
           <span className="text-4xl mb-4 block animate-pulse">🎬</span>
           <p className="text-sm text-muted-foreground">Connecting…</p>
@@ -288,7 +288,7 @@ const Index = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background overflow-hidden">
+    <div className="flex flex-col h-dvh bg-background overflow-hidden">
       <ConnectionStatus isOffline={isOffline} />
       {isMobile && <MobileSidebarDrawer {...sidebarProps} />}
       <div className="flex flex-1 overflow-hidden">
