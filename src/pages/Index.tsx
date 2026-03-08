@@ -21,6 +21,7 @@ const Index = () => {
   const [isThinking, setIsThinking] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const streamMsgIdRef = useRef<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [limits, setLimits] = useState<Limits>(DEFAULT_LIMITS);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
@@ -172,6 +173,11 @@ const Index = () => {
       };
       setMessages((prev) => [...prev, userMsg]);
       setIsThinking(true);
+
+      // Cancel any in-flight stream
+      abortControllerRef.current?.abort();
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
 
       const assistantId = crypto.randomUUID();
       streamMsgIdRef.current = assistantId;
