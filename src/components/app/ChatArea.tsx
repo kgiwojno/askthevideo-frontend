@@ -343,6 +343,15 @@ const ChatArea = ({
       {/* Chat Input */}
       <div className="border-t border-border p-4 bg-background">
         <div className="flex items-center gap-3 max-w-4xl mx-auto">
+          {messages.length > 0 && (
+            <button
+              onClick={handleExportChat}
+              title="Export chat as Markdown"
+              className="p-3 rounded-button bg-secondary text-muted-foreground hover:text-foreground border border-muted transition-colors"
+            >
+              <Download className="w-4 h-4" />
+            </button>
+          )}
           <input
             type="text"
             value={input}
@@ -358,15 +367,6 @@ const ChatArea = ({
             }
             className="flex-1 bg-secondary text-foreground text-sm border border-muted rounded-input px-4 py-3 placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:shadow-focus-ring transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           />
-          {messages.length > 0 && (
-            <button
-              onClick={handleExportChat}
-              title="Export chat as Markdown"
-              className="p-3 rounded-button bg-secondary text-muted-foreground hover:text-foreground border border-muted transition-colors"
-            >
-              <Download className="w-4 h-4" />
-            </button>
-          )}
           {speechRecognitionSupported && (
             <button
               onClick={isListening ? stopListening : startListening}
