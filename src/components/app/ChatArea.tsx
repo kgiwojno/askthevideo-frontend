@@ -56,8 +56,7 @@ const WelcomeScreen = ({ onSelectPrompt }: { onSelectPrompt: (text: string) => v
       transition={{ duration: 0.5 }}
       className="flex-1 flex items-center justify-center relative"
       style={{
-        backgroundImage: `radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px)`,
-        backgroundSize: '24px 24px',
+        backgroundImage: `radial-gradient(circle at 50% 50%, hsl(var(--primary) / 0.06) 0%, transparent 70%)`,
       }}
     >
       <div className="text-center max-w-md px-6">
