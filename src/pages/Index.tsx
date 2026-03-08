@@ -3,6 +3,7 @@ import { Video, ChatMessage, Limits } from "@/types/app";
 import { apiCall } from "@/lib/api";
 import AppSidebar from "@/components/app/AppSidebar";
 import ChatArea from "@/components/app/ChatArea";
+import ConnectionStatus from "@/components/app/ConnectionStatus";
 import { toast } from "sonner";
 
 const DEFAULT_LIMITS: Limits = {
@@ -19,6 +20,8 @@ const Index = () => {
   const [isLoadingVideo, setIsLoadingVideo] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [limits, setLimits] = useState<Limits>(DEFAULT_LIMITS);
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
 
   // Derived state
   const questionsRemaining = limits.unlimited
@@ -69,7 +72,10 @@ const Index = () => {
           }
         }
       } catch {
-        // Backend may not be available yet; app works in degraded mode
+        // Backend not available
+        setIsOffline(true);
+      } finally {
+        setIsInitializing(false);
       }
     };
     init();
@@ -218,28 +224,42 @@ const Index = () => {
     }
   }, []);
 
+  if (isInitializing) {
+    return (
+      <div className="flex h-screen bg-background items-center justify-center">
+        <div className="text-center">
+          <span className="text-4xl mb-4 block animate-pulse">🎬</span>
+          <p className="text-sm text-muted-foreground">Connecting…</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
-      <AppSidebar
-        videos={videos}
-        onLoadVideo={handleLoadVideo}
-        onRemoveVideo={handleRemoveVideo}
-        onToggleVideo={handleToggleVideo}
-        questionsRemaining={isUnlimited ? Infinity : questionsRemaining}
-        isUnlimited={isUnlimited}
-        isLoadingVideo={isLoadingVideo}
-        onSubmitAccessKey={handleSubmitAccessKey}
-        limits={limits}
-      />
-      <ChatArea
-        messages={messages}
-        onSendMessage={handleSendMessage}
-        hasVideos={videos.length > 0}
-        isThinking={isThinking}
-        questionsRemaining={isUnlimited ? Infinity : questionsRemaining}
-        isUnlimited={isUnlimited}
-        limitReached={limitReached}
-      />
+    <div className="flex flex-col h-screen bg-background overflow-hidden">
+      <ConnectionStatus isOffline={isOffline} />
+      <div className="flex flex-1 overflow-hidden">
+        <AppSidebar
+          videos={videos}
+          onLoadVideo={handleLoadVideo}
+          onRemoveVideo={handleRemoveVideo}
+          onToggleVideo={handleToggleVideo}
+          questionsRemaining={isUnlimited ? Infinity : questionsRemaining}
+          isUnlimited={isUnlimited}
+          isLoadingVideo={isLoadingVideo}
+          onSubmitAccessKey={handleSubmitAccessKey}
+          limits={limits}
+        />
+        <ChatArea
+          messages={messages}
+          onSendMessage={handleSendMessage}
+          hasVideos={videos.length > 0}
+          isThinking={isThinking}
+          questionsRemaining={isUnlimited ? Infinity : questionsRemaining}
+          isUnlimited={isUnlimited}
+          limitReached={limitReached}
+        />
+      </div>
     </div>
   );
 };
