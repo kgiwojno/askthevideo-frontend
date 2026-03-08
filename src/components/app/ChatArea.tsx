@@ -15,6 +15,8 @@ interface ChatAreaProps {
   onSendMessage: (text: string) => void;
   hasVideos: boolean;
   isThinking: boolean;
+  isStreaming: boolean;
+  streamingMsgId: string | null;
   questionsRemaining: number;
   isUnlimited: boolean;
   limitReached: boolean;
@@ -167,6 +169,8 @@ const ChatArea = ({
   onSendMessage,
   hasVideos,
   isThinking,
+  isStreaming,
+  streamingMsgId,
   questionsRemaining,
   isUnlimited,
   limitReached,
@@ -181,10 +185,10 @@ const ChatArea = ({
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isThinking]);
+  }, [messages, isThinking, isStreaming]);
 
   const handleSend = () => {
-    if (input.trim() && !limitReached && hasVideos) {
+    if (input.trim() && !limitReached && hasVideos && !isStreaming) {
       onSendMessage(input.trim());
       setInput("");
     }
@@ -208,7 +212,7 @@ const ChatArea = ({
     URL.revokeObjectURL(url);
   }, [messages]);
 
-  const inputDisabled = !hasVideos || limitReached;
+  const inputDisabled = !hasVideos || limitReached || isStreaming;
 
   return (
     <div className="flex-1 flex flex-col h-screen overflow-hidden">
@@ -287,25 +291,34 @@ const ChatArea = ({
                   }`}
                 >
                   {msg.role === "assistant" ? (
-                    <MarkdownMessage content={msg.content} />
+                    <>
+                      <MarkdownMessage content={msg.content} />
+                      {/* Blinking cursor during streaming */}
+                      {isStreaming && msg.id === streamingMsgId && (
+                        <span className="inline-block w-2 h-4 bg-primary/70 animate-pulse ml-0.5 align-text-bottom rounded-sm" />
+                      )}
+                    </>
                   ) : (
                     msg.content
                   )}
-                  {msg.role === "assistant" && speechSynthesisSupported && (
-                    <button
-                      onClick={() =>
-                        isSpeaking === msg.id ? stop() : speak(msg.content, msg.id)
-                      }
-                      title={isSpeaking === msg.id ? "Stop reading" : "Read aloud"}
-                      className="mt-2 p-1 rounded text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {isSpeaking === msg.id ? (
-                        <VolumeX className="w-3.5 h-3.5" />
-                      ) : (
-                        <Volume2 className="w-3.5 h-3.5" />
-                      )}
-                    </button>
-                  )}
+                  {/* Only show read-aloud button when message is NOT actively streaming */}
+                  {msg.role === "assistant" &&
+                    speechSynthesisSupported &&
+                    !(isStreaming && msg.id === streamingMsgId) && (
+                      <button
+                        onClick={() =>
+                          isSpeaking === msg.id ? stop() : speak(msg.content, msg.id)
+                        }
+                        title={isSpeaking === msg.id ? "Stop reading" : "Read aloud"}
+                        className="mt-2 p-1 rounded text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {isSpeaking === msg.id ? (
+                          <VolumeX className="w-3.5 h-3.5" />
+                        ) : (
+                          <Volume2 className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    )}
                 </div>
               </motion.div>
             ))}
