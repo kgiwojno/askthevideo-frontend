@@ -2,7 +2,7 @@
 
 ## UI / UX
 
-_(No pending items)_
+- **Export Chat as Markdown**: Download button that exports chat history as a `.md` file. Pure frontend, no API needed. Useful for saving research sessions.
 
 ## Done ✅
 
