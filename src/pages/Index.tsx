@@ -15,7 +15,12 @@ const DEFAULT_LIMITS: Limits = {
 };
 
 const Index = () => {
-  const [videos, setVideos] = useState<Video[]>([]);
+  // TODO: Remove mock videos after visual testing
+  const [videos, setVideos] = useState<Video[]>([
+    { id: "dQw4w9WgXcQ", video_id: "dQw4w9WgXcQ", title: "Rick Astley - Never Gonna Give You Up (Official Music Video)", channel: "Rick Astley", url: "https://youtube.com/watch?v=dQw4w9WgXcQ", duration: "3:33", selected: true },
+    { id: "9bZkp7q19f0", video_id: "9bZkp7q19f0", title: "PSY - GANGNAM STYLE(강남스타일) M/V", channel: "officialpsy", url: "https://youtube.com/watch?v=9bZkp7q19f0", duration: "4:13", selected: true },
+    { id: "jNQXAC9IVRw", video_id: "jNQXAC9IVRw", title: "Me at the zoo", channel: "jawed", url: "https://youtube.com/watch?v=jNQXAC9IVRw", duration: "0:19", selected: false },
+  ]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoadingVideo, setIsLoadingVideo] = useState(false);
   const [isThinking, setIsThinking] = useState(false);

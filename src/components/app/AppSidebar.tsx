@@ -105,19 +105,33 @@ const AppSidebar = ({
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className={`flex items-center gap-2 p-2 rounded-input text-sm cursor-pointer transition-colors group ${
+                  className={`flex items-start gap-2.5 p-2 rounded-input text-sm cursor-pointer transition-colors group ${
                     video.selected
                       ? "bg-secondary border-l-2 border-l-primary"
                       : "hover:bg-secondary/60"
                   }`}
                   onClick={() => onToggleVideo(video.id)}
                 >
-                  <Film className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                  <span className="truncate flex-1 text-foreground text-xs">
-                    {video.title.length > 40
-                      ? video.title.slice(0, 40) + "…"
-                      : video.title}
-                  </span>
+                  <img
+                    src={`https://img.youtube.com/vi/${video.video_id}/default.jpg`}
+                    alt=""
+                    className="w-16 h-9 rounded object-cover shrink-0 bg-muted"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <span className="block truncate text-foreground text-xs leading-tight">
+                      {video.title.length > 40
+                        ? video.title.slice(0, 40) + "…"
+                        : video.title}
+                    </span>
+                    {video.channel && (
+                      <span className="block text-[10px] text-muted-foreground truncate mt-0.5">
+                        {video.channel}
+                      </span>
+                    )}
+                    {video.duration && (
+                      <span className="text-[10px] text-muted-foreground">{video.duration}</span>
+                    )}
+                  </div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
