@@ -202,7 +202,7 @@ const AppSidebar = ({
             Buy Me a Coffee
           </a>
           <a
-            href="https://forms.google.com/placeholder"
+            href="https://forms.gle/8LQNE85WL29wSdno8"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors"
