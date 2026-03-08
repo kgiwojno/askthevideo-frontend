@@ -24,8 +24,8 @@ interface ChatAreaProps {
 
 const ThinkingIndicator = () => (
   <div className="flex items-start gap-3 px-6 py-3">
-    <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden">
-      <img src="/favicon.png" alt="AskTheVideo" className="w-8 h-8" />
+    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 overflow-hidden">
+      <span className="text-base">🎬</span>
     </div>
     <div className="bg-card border border-border rounded-card p-4 max-w-[75%]">
       <div className="flex items-center gap-1.5">
@@ -269,7 +269,7 @@ const ChatArea = ({
                   {msg.role === "user" ? (
                     <User className="w-4 h-4 text-primary" />
                   ) : (
-                    <img src="/favicon.png" alt="AskTheVideo" className="w-8 h-8" />
+                    <span className="text-base">🎬</span>
                   )}
                 </div>
                 <div
@@ -313,6 +313,29 @@ const ChatArea = ({
             ))}
           </AnimatePresence>
           {isThinking && <ThinkingIndicator />}
+          {/* Show "try asking" chips until user sends first question */}
+          {hasVideos && !messages.some((m) => m.role === "user") && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="px-6 py-4"
+            >
+              <p className="text-xs text-muted-foreground mb-2">Try asking:</p>
+              <div className="flex flex-wrap gap-2">
+                {EXAMPLE_PROMPTS.map((prompt) => (
+                  <button
+                    key={prompt}
+                    onClick={() => {
+                      setInput(prompt);
+                    }}
+                    className="text-xs px-3 py-1.5 rounded-full border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors cursor-pointer"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
           <div ref={bottomRef} />
         </div>
       )}
@@ -320,6 +343,15 @@ const ChatArea = ({
       {/* Chat Input */}
       <div className="border-t border-border p-4 bg-background">
         <div className="flex items-center gap-3 max-w-4xl mx-auto">
+          {messages.length > 0 && (
+            <button
+              onClick={handleExportChat}
+              title="Export chat as Markdown"
+              className="p-3 rounded-button bg-secondary text-muted-foreground hover:text-foreground border border-muted transition-colors"
+            >
+              <Download className="w-4 h-4" />
+            </button>
+          )}
           <input
             type="text"
             value={input}
@@ -335,15 +367,6 @@ const ChatArea = ({
             }
             className="flex-1 bg-secondary text-foreground text-sm border border-muted rounded-input px-4 py-3 placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:shadow-focus-ring transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           />
-          {messages.length > 0 && (
-            <button
-              onClick={handleExportChat}
-              title="Export chat as Markdown"
-              className="p-3 rounded-button bg-secondary text-muted-foreground hover:text-foreground border border-muted transition-colors"
-            >
-              <Download className="w-4 h-4" />
-            </button>
-          )}
           {speechRecognitionSupported && (
             <button
               onClick={isListening ? stopListening : startListening}
