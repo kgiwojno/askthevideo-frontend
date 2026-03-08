@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Video } from "@/types/app";
+import { Video, Limits } from "@/types/app";
 import { Film, X, ChevronDown, ChevronRight, Coffee, MessageSquare, Key, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,6 +12,7 @@ interface AppSidebarProps {
   isUnlimited: boolean;
   isLoadingVideo: boolean;
   onSubmitAccessKey: (key: string) => void;
+  limits: Limits;
 }
 
 const AppSidebar = ({
@@ -23,6 +24,7 @@ const AppSidebar = ({
   isUnlimited,
   isLoadingVideo,
   onSubmitAccessKey,
+  limits,
 }: AppSidebarProps) => {
   const [url, setUrl] = useState("");
   const [accessKey, setAccessKey] = useState("");
@@ -41,6 +43,9 @@ const AppSidebar = ({
       setAccessKey("");
     }
   };
+
+  const videosMax = limits.videos_max ?? 5;
+  const videoLimitReached = !isUnlimited && videos.length >= videosMax;
 
   return (
     <aside className="w-[300px] min-w-[300px] h-screen bg-card border-r border-border flex flex-col overflow-hidden">
@@ -65,7 +70,7 @@ const AppSidebar = ({
         />
         <button
           onClick={handleLoadVideo}
-          disabled={!url.trim() || isLoadingVideo || videos.length >= 5}
+          disabled={!url.trim() || isLoadingVideo || videoLimitReached}
           className="mt-2 w-full bg-primary text-primary-foreground font-semibold text-sm py-2 rounded-button shadow-primary-glow hover:opacity-85 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isLoadingVideo ? (
@@ -131,13 +136,13 @@ const AppSidebar = ({
         {/* Limits */}
         <div className="px-5 py-3 space-y-1">
           <p className="text-xs text-muted-foreground">
-            📊 {videos.length}/5 videos loaded
+            📊 {limits.videos_loaded}/{isUnlimited ? "∞" : videosMax} videos loaded
           </p>
           {isUnlimited ? (
             <p className="text-xs text-success">📊 Unlimited access ✅</p>
           ) : (
             <p className="text-xs text-muted-foreground">
-              📊 {questionsRemaining}/10 questions remaining
+              📊 {limits.questions_used}/{limits.questions_max ?? 10} questions used
             </p>
           )}
         </div>

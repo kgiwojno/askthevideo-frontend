@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ChatMessage } from "@/types/app";
 import { Send, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 
 interface ChatAreaProps {
   messages: ChatMessage[];
@@ -65,40 +66,39 @@ const WelcomeScreen = () => (
   </motion.div>
 );
 
-const formatMessageContent = (content: string) => {
-  // Convert timestamp links: [3:00-4:30](url) → clickable styled links
-  const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
-  const parts: (string | JSX.Element)[] = [];
-  let lastIndex = 0;
-  let match;
-
-  while ((match = linkRegex.exec(content)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(content.slice(lastIndex, match.index));
-    }
-    const isTimestamp = /^\d+:\d+/.test(match[1]);
-    parts.push(
-      <a
-        key={match.index}
-        href={match[2]}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={
-          isTimestamp
-            ? "inline-block text-primary font-medium text-[13px] bg-primary/10 px-1.5 py-0.5 rounded hover:bg-primary/20 transition-colors"
-            : "text-primary hover:underline"
-        }
-      >
-        {match[1]}
-      </a>
-    );
-    lastIndex = match.index + match[0].length;
-  }
-  if (lastIndex < content.length) {
-    parts.push(content.slice(lastIndex));
-  }
-  return parts.length > 0 ? parts : content;
-};
+const MarkdownMessage = ({ content }: { content: string }) => (
+  <ReactMarkdown
+    components={{
+      a: ({ href, children }) => (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary font-medium hover:underline transition-colors"
+        >
+          {children}
+        </a>
+      ),
+      strong: ({ children }) => (
+        <strong className="font-semibold text-foreground">{children}</strong>
+      ),
+      ol: ({ children }) => (
+        <ol className="list-decimal list-inside my-2 space-y-1">{children}</ol>
+      ),
+      ul: ({ children }) => (
+        <ul className="list-disc list-inside my-2 space-y-1">{children}</ul>
+      ),
+      code: ({ children }) => (
+        <code className="bg-secondary px-1.5 py-0.5 rounded text-xs font-mono">
+          {children}
+        </code>
+      ),
+      p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+    }}
+  >
+    {content}
+  </ReactMarkdown>
+);
 
 const ChatArea = ({
   messages,
@@ -190,7 +190,11 @@ const ChatArea = ({
                       : "bg-card border border-border text-foreground"
                   }`}
                 >
-                  {formatMessageContent(msg.content)}
+                  {msg.role === "assistant" ? (
+                    <MarkdownMessage content={msg.content} />
+                  ) : (
+                    msg.content
+                  )}
                 </div>
               </motion.div>
             ))}
