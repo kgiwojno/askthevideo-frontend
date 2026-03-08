@@ -37,16 +37,31 @@ const WelcomeScreen = () => (
     transition={{ duration: 0.5 }}
     className="flex-1 flex items-center justify-center"
   >
-    <div className="text-center max-w-sm px-6">
+    <div className="text-center max-w-md px-6">
       <span className="text-5xl mb-6 block">🎬</span>
-      <h2 className="text-2xl font-bold text-foreground mb-4 tracking-tight">
+      <h2 className="text-2xl font-bold text-foreground mb-3 tracking-tight">
         Welcome to AskTheVideo
       </h2>
-      <ol className="text-sm text-muted-foreground leading-relaxed space-y-2 text-left list-decimal list-inside">
-        <li>Paste a YouTube URL in the sidebar</li>
-        <li>Click <span className="text-foreground font-medium">Load Video</span> to process it</li>
-        <li>Ask any question about the video content</li>
-      </ol>
+      <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+        Paste a YouTube URL in the sidebar to get started. You can ask questions,
+        get summaries, compare videos, and more.
+      </p>
+      <div className="grid grid-cols-2 gap-3 text-left">
+        {[
+          { icon: "💬", label: "Ask questions about video content" },
+          { icon: "📝", label: "Get summaries with timestamps" },
+          { icon: "🔍", label: "Search across multiple videos" },
+          { icon: "⚡", label: "Instant AI-powered answers" },
+        ].map((item) => (
+          <div
+            key={item.label}
+            className="bg-card border border-border rounded-card p-3 text-xs text-muted-foreground flex items-start gap-2"
+          >
+            <span className="text-base shrink-0">{item.icon}</span>
+            {item.label}
+          </div>
+        ))}
+      </div>
     </div>
   </motion.div>
 );

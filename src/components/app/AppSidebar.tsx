@@ -82,20 +82,6 @@ const AppSidebar = ({
             "Load Video"
           )}
         </button>
-        <AnimatePresence>
-          {videoLimitReached && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden"
-            >
-              <p className="mt-2 text-xs text-accent font-medium">
-                ⚠️ Maximum {videosMax} videos reached. Remove one to add another.
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       <div className="h-px bg-border mx-5" />
