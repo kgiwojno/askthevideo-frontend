@@ -1,8 +1,14 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ChatMessage } from "@/types/app";
-import { Send, User, Download } from "lucide-react";
+import { Send, User, Download, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import {
+  speechRecognitionSupported,
+  useSpeechRecognition,
+  speechSynthesisSupported,
+  useSpeechSynthesis,
+} from "@/hooks/use-speech";
 
 interface ChatAreaProps {
   messages: ChatMessage[];
