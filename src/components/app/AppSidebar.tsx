@@ -82,6 +82,11 @@ const AppSidebar = ({
             "Load Video"
           )}
         </button>
+        {videoLimitReached && (
+          <div className="mt-2 text-xs text-destructive bg-destructive/10 border border-destructive/30 rounded-md px-3 py-2 text-center">
+            Maximum {videosMax} videos reached. Remove a video to add another.
+          </div>
+        )}
       </div>
 
       <div className="h-px bg-border mx-5" />
