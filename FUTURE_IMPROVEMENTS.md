@@ -2,7 +2,7 @@
 
 ## UI / UX
 
-- **Welcome Screen**: Replace feature grid with simpler text-based instructions matching the original spec (paste URL → ask questions flow).
+_(No pending items)_
 
 ## Done ✅
 ## Done ✅
