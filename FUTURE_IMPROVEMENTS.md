@@ -1,6 +1,9 @@
 # Future Improvements
 
-_All planned features have been implemented!_ 🎉
+## Planned
+
+- **Bundle Size Optimization**: The production JS bundle exceeds 500 KB (593 KB). Add `build.rollupOptions.output.manualChunks` in `vite.config.ts` to split heavy dependencies (`recharts`, `react-markdown`, `framer-motion`, `@radix-ui/*`) into separate chunks for better loading performance.
+- **Update Browserslist DB**: Run `npx update-browserslist-db@latest` to refresh the `caniuse-lite` database and suppress the outdated browserslist build warning.
 
 ## Done ✅
 
