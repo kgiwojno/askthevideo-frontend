@@ -2,8 +2,10 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { Video, ChatMessage, Limits } from "@/types/app";
 import { apiCall, apiStreamCall } from "@/lib/api";
 import AppSidebar from "@/components/app/AppSidebar";
+import MobileSidebarDrawer from "@/components/app/MobileSidebarDrawer";
 import ChatArea from "@/components/app/ChatArea";
 import ConnectionStatus from "@/components/app/ConnectionStatus";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 
 const DEFAULT_LIMITS: Limits = {
