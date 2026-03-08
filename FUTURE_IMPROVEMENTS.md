@@ -1,11 +1,10 @@
 # Future Improvements
 
-## UI / UX
-
-- **Streaming Responses (SSE)**: Stream answers word-by-word via Server-Sent Events instead of waiting for full response. Frontend consumes `EventSource`/`fetch` stream from `POST /api/ask`. Backend (FastAPI) SSE support handled separately by user.
+_All planned features have been implemented!_ 🎉
 
 ## Done ✅
 
+- ~~**Streaming Responses (SSE)**~~: Word-by-word streaming via SSE with automatic fallback to non-streaming.
 - ~~**Export Chat as Markdown**~~: Download button that exports chat history as a `.md` file.
 - ~~**Video Thumbnail Display**~~: Show thumbnail next to each video in the sidebar.
 - ~~**Voice Input**~~: Mic button next to chat input using Web Speech API.

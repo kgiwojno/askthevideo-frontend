@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Video, ChatMessage, Limits } from "@/types/app";
-import { apiCall } from "@/lib/api";
+import { apiCall, apiStreamCall } from "@/lib/api";
 import AppSidebar from "@/components/app/AppSidebar";
 import ChatArea from "@/components/app/ChatArea";
 import ConnectionStatus from "@/components/app/ConnectionStatus";
@@ -19,6 +19,8 @@ const Index = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoadingVideo, setIsLoadingVideo] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const streamMsgIdRef = useRef<string | null>(null);
   const [limits, setLimits] = useState<Limits>(DEFAULT_LIMITS);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
@@ -171,33 +173,61 @@ const Index = () => {
       setMessages((prev) => [...prev, userMsg]);
       setIsThinking(true);
 
-      try {
-        const data = await apiCall("POST", "/api/ask", { question: text });
-        const assistantMsg: ChatMessage = {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: data.answer,
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, assistantMsg]);
-        if (data.limits) setLimits(data.limits);
-      } catch (err: any) {
-        const msg = err?.error || "Failed to get a response.";
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: crypto.randomUUID(),
-            role: "assistant",
-            content: `Error: ${msg}`,
-            timestamp: new Date(),
-          },
-        ]);
-        if (err?.code === "QUESTION_LIMIT") {
-          setLimits((prev) => ({ ...prev, questions_used: prev.questions_max ?? 10 }));
+      const assistantId = crypto.randomUUID();
+      streamMsgIdRef.current = assistantId;
+
+      await apiStreamCall(
+        "/api/ask/stream",
+        { question: text },
+        // onToken — append streaming message
+        (accumulated) => {
+          setIsThinking(false);
+          setIsStreaming(true);
+          setMessages((prev) => {
+            const existing = prev.find((m) => m.id === assistantId);
+            if (existing) {
+              return prev.map((m) =>
+                m.id === assistantId ? { ...m, content: accumulated } : m
+              );
+            }
+            return [
+              ...prev,
+              {
+                id: assistantId,
+                role: "assistant" as const,
+                content: accumulated,
+                timestamp: new Date(),
+              },
+            ];
+          });
+        },
+        // onDone
+        (_fullText, data) => {
+          setIsThinking(false);
+          setIsStreaming(false);
+          streamMsgIdRef.current = null;
+          if (data?.limits) setLimits(data.limits);
+        },
+        // onError
+        (err) => {
+          setIsThinking(false);
+          setIsStreaming(false);
+          streamMsgIdRef.current = null;
+          const msg = err?.error || "Failed to get a response.";
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: assistantId,
+              role: "assistant",
+              content: `Error: ${msg}`,
+              timestamp: new Date(),
+            },
+          ]);
+          if (err?.code === "QUESTION_LIMIT") {
+            setLimits((prev) => ({ ...prev, questions_used: prev.questions_max ?? 10 }));
+          }
         }
-      } finally {
-        setIsThinking(false);
-      }
+      );
     },
     []
   );
@@ -255,6 +285,8 @@ const Index = () => {
           onSendMessage={handleSendMessage}
           hasVideos={videos.length > 0}
           isThinking={isThinking}
+          isStreaming={isStreaming}
+          streamingMsgId={streamMsgIdRef.current}
           questionsRemaining={isUnlimited ? Infinity : questionsRemaining}
           isUnlimited={isUnlimited}
           limitReached={limitReached}

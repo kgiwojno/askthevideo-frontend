@@ -73,3 +73,109 @@ export async function apiCall<T = any>(
 
   throw lastError;
 }
+
+/**
+ * Stream a POST request via SSE (Server-Sent Events).
+ * The backend sends `data: {"token":"..."}` lines, and a final `data: [DONE]`.
+ * Falls back to regular `/api/ask` if the stream endpoint fails to connect.
+ */
+export async function apiStreamCall(
+  path: string,
+  body: any,
+  onToken: (token: string) => void,
+  onDone: (fullText: string, data?: any) => void,
+  onError: (err: any) => void
+): Promise<void> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (sessionId) {
+    headers["X-Session-ID"] = sessionId;
+  }
+
+  try {
+    const res = await fetch(path, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    // If stream endpoint doesn't exist (404/405), fall back
+    if (res.status === 404 || res.status === 405) {
+      throw { fallback: true };
+    }
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw { error: errData.error || "Stream request failed", code: errData.code };
+    }
+
+    if (!res.body) {
+      throw { fallback: true };
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let accumulated = "";
+    let buffer = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed || !trimmed.startsWith("data: ")) continue;
+
+        const payload = trimmed.slice(6);
+
+        if (payload === "[DONE]") {
+          onDone(accumulated);
+          return;
+        }
+
+        try {
+          const parsed = JSON.parse(payload);
+
+          // Capture session ID
+          if (parsed.session_id) {
+            sessionId = parsed.session_id;
+          }
+
+          if (parsed.token) {
+            accumulated += parsed.token;
+            onToken(accumulated);
+          }
+
+          // Final message with limits
+          if (parsed.limits) {
+            onDone(accumulated, parsed);
+            return;
+          }
+        } catch {
+          // Skip malformed lines
+        }
+      }
+    }
+
+    // Stream ended without [DONE] — still complete
+    onDone(accumulated);
+  } catch (err: any) {
+    if (err?.fallback) {
+      // Fallback to non-streaming endpoint
+      try {
+        const data = await apiCall("POST", "/api/ask", body);
+        onToken(data.answer);
+        onDone(data.answer, data);
+      } catch (fallbackErr) {
+        onError(fallbackErr);
+      }
+    } else {
+      onError(err);
+    }
+  }
+}
