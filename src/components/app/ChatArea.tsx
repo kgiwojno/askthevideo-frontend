@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { ChatMessage } from "@/types/app";
-import { Send, Bot, User } from "lucide-react";
+import { Send, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ChatAreaProps {
@@ -15,8 +15,8 @@ interface ChatAreaProps {
 
 const ThinkingIndicator = () => (
   <div className="flex items-start gap-3 px-6 py-3">
-    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-      <Bot className="w-4 h-4 text-primary" />
+    <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+      <img src="/favicon.png" alt="AskTheVideo" className="w-8 h-8" />
     </div>
     <div className="bg-card border border-border rounded-card p-4 max-w-[75%]">
       <div className="flex items-center gap-1.5">
@@ -171,16 +171,16 @@ const ChatArea = ({
                 }`}
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden ${
                     msg.role === "user"
                       ? "bg-primary/20"
-                      : "bg-primary/10"
+                      : ""
                   }`}
                 >
                   {msg.role === "user" ? (
                     <User className="w-4 h-4 text-primary" />
                   ) : (
-                    <Bot className="w-4 h-4 text-primary" />
+                    <img src="/favicon.png" alt="AskTheVideo" className="w-8 h-8" />
                   )}
                 </div>
                 <div
