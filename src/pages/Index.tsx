@@ -144,23 +144,23 @@ const Index = () => {
   }, []);
 
   const handleToggleVideo = useCallback(async (id: string) => {
-    // Optimistic update
-    setVideos((prev) =>
-      prev.map((v) => (v.id === id ? { ...v, selected: !v.selected } : v))
-    );
+    let previousSelected: boolean | undefined;
+    setVideos((prev) => {
+      const video = prev.find((v) => v.id === id);
+      previousSelected = video?.selected;
+      return prev.map((v) => (v.id === id ? { ...v, selected: !v.selected } : v));
+    });
     try {
-      const current = videos.find((v) => v.id === id);
       await apiCall("PATCH", `/api/videos/${id}`, {
-        selected: !(current?.selected ?? true),
+        selected: !previousSelected,
       });
     } catch (err: any) {
-      // Revert on failure
       setVideos((prev) =>
         prev.map((v) => (v.id === id ? { ...v, selected: !v.selected } : v))
       );
       toast.error(err?.error || "Failed to update video.");
     }
-  }, [videos]);
+  }, []);
 
   const handleSendMessage = useCallback(
     async (text: string) => {
