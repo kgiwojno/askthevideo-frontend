@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { ChatMessage } from "@/types/app";
-import { Send, User } from "lucide-react";
+import { Send, User, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 
@@ -179,6 +179,24 @@ const ChatArea = ({
     }
   };
 
+  const handleExportChat = useCallback(() => {
+    if (messages.length === 0) return;
+    const md = messages
+      .map((m) => {
+        const role = m.role === "user" ? "**You**" : "**AskTheVideo**";
+        return `${role}\n\n${m.content}`;
+      })
+      .join("\n\n---\n\n");
+    const header = `# AskTheVideo Chat Export\n_Exported on ${new Date().toLocaleString()}_\n\n---\n\n`;
+    const blob = new Blob([header + md], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `askthevideo-chat-${Date.now()}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [messages]);
+
   const inputDisabled = !hasVideos || limitReached;
 
   return (
@@ -215,7 +233,18 @@ const ChatArea = ({
       {!hasVideos && messages.length === 0 ? (
         <WelcomeScreen onSelectPrompt={(text) => setInput(text)} />
       ) : (
-        <div className="flex-1 overflow-y-auto py-4">
+        <div className="flex-1 overflow-y-auto py-4 relative">
+          {messages.length > 0 && (
+            <div className="absolute top-2 right-4 z-10">
+              <button
+                onClick={handleExportChat}
+                title="Export chat as Markdown"
+                className="p-2 rounded-md bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
+              >
+                <Download className="w-4 h-4" />
+              </button>
+            </div>
+          )}
           <AnimatePresence>
             {messages.map((msg) => (
               <motion.div
