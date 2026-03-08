@@ -8,9 +8,11 @@ This folder contains all the visual layer assets needed to style the Streamlit a
 
 | File | Description |
 |------|-------------|
+| `app.py` | Ready-to-run Streamlit app skeleton — wires together CSS, HTML snippets, sidebar, chat area, and placeholder backend functions |
 | `.streamlit/config.toml` | Streamlit theme configuration (colors, font, server settings) |
 | `css_overrides.py` | CSS override block injected via `st.markdown()` — covers chat bubbles, inputs, buttons, scrollbar, hidden Streamlit defaults |
 | `html_snippets.py` | Ready-to-use HTML strings for sidebar title, BMC button, feedback link, footer, welcome screen, video items, badges |
+| `favicon.png` | App favicon used as `page_icon` in `st.set_page_config()` |
 | `LAYOUT_GUIDE.md` | Complete layout reference with code examples, state table, and Streamlit-specific tips |
 | `DESIGN_TOKENS.md` | Color palette, typography, spacing, border radius, and shadows — all with hex/HSL values |
 
