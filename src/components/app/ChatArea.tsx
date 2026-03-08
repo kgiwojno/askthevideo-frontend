@@ -174,6 +174,11 @@ const ChatArea = ({
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  const { isListening, startListening, stopListening } = useSpeechRecognition(
+    useCallback((text: string) => setInput((prev) => (prev ? prev + " " + text : text)), [])
+  );
+  const { isSpeaking, speak, stop } = useSpeechSynthesis();
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isThinking]);
