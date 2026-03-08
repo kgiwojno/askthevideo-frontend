@@ -1,4 +1,5 @@
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import AppSidebar from "./AppSidebar";
@@ -29,7 +30,10 @@ const MobileSidebarDrawer = (props: MobileSidebarDrawerProps) => {
           <Menu className="w-5 h-5" />
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="p-0 w-[300px] sm:w-[300px] bg-card border-r border-border">
+      <SheetContent side="left" className="p-0 w-[300px] sm:w-[300px] bg-card border-r border-border" aria-describedby={undefined}>
+        <VisuallyHidden>
+          <SheetTitle>Navigation</SheetTitle>
+        </VisuallyHidden>
         <AppSidebar {...props} />
       </SheetContent>
     </Sheet>
