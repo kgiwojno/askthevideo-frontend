@@ -4,10 +4,7 @@
 
 - **Welcome Screen**: Replace feature grid with simpler text-based instructions matching the original spec (paste URL → ask questions flow).
 
-## Cleanup
-
-- Remove `streamlit/` directory and related files (`STREAMLIT_APP_SPEC`, `STREAMLIT_DESIGN_SPEC`, etc.) — no longer needed after switching to React + FastAPI.
-
+## Done ✅
 ## Done ✅
 
 - ~~**"Maximum 5 Videos" Warning**~~: Visible warning banner when video limit reached.
