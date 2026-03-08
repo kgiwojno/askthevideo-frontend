@@ -17,6 +17,7 @@ const DEFAULT_LIMITS: Limits = {
 };
 
 const Index = () => {
+  const isMobile = useIsMobile();
   const [videos, setVideos] = useState<Video[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoadingVideo, setIsLoadingVideo] = useState(false);
