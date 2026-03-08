@@ -275,21 +275,24 @@ const Index = () => {
     );
   }
 
+  const sidebarProps = {
+    videos,
+    onLoadVideo: handleLoadVideo,
+    onRemoveVideo: handleRemoveVideo,
+    onToggleVideo: handleToggleVideo,
+    questionsRemaining: isUnlimited ? Infinity : questionsRemaining,
+    isUnlimited,
+    isLoadingVideo,
+    onSubmitAccessKey: handleSubmitAccessKey,
+    limits,
+  };
+
   return (
     <div className="flex flex-col h-screen bg-background overflow-hidden">
       <ConnectionStatus isOffline={isOffline} />
+      {isMobile && <MobileSidebarDrawer {...sidebarProps} />}
       <div className="flex flex-1 overflow-hidden">
-        <AppSidebar
-          videos={videos}
-          onLoadVideo={handleLoadVideo}
-          onRemoveVideo={handleRemoveVideo}
-          onToggleVideo={handleToggleVideo}
-          questionsRemaining={isUnlimited ? Infinity : questionsRemaining}
-          isUnlimited={isUnlimited}
-          isLoadingVideo={isLoadingVideo}
-          onSubmitAccessKey={handleSubmitAccessKey}
-          limits={limits}
-        />
+        {!isMobile && <AppSidebar {...sidebarProps} />}
         <ChatArea
           messages={messages}
           onSendMessage={handleSendMessage}
