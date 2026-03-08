@@ -3,7 +3,8 @@
 ## UI / UX
 
 - **Export Chat as Markdown**: Download button that exports chat history as a `.md` file. Pure frontend, no API needed. Useful for saving research sessions.
-- **Video Thumbnail Display**: Show `thumbnail_url` (from oEmbed metadata) next to each loaded video in the sidebar. One `<img>` per video for a richer video list.
+- **Video Thumbnail Display**: Show thumbnail next to each video in the sidebar. Fetch client-side via YouTube oEmbed endpoint (no API dependency).
+- **Voice Input**: Mic button next to chat input using Web Speech API (`SpeechRecognition`). Transcript fills the input field. Graceful degradation — button only shown if browser supports it (Chrome/Edge/Safari). Firefox users simply don't see it.
 
 ## Done ✅
 
