@@ -48,6 +48,7 @@ const Index = () => {
   // Initialise session on mount
   useEffect(() => {
     const init = async () => {
+      setIsInitializing(true);
       try {
         const data = await apiCall("GET", "/api/status");
         if (data.limits) {
