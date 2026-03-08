@@ -37,58 +37,79 @@ const EXAMPLE_PROMPTS = [
   "List all topics covered",
 ];
 
-const WelcomeScreen = ({ onSelectPrompt }: { onSelectPrompt: (text: string) => void }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-    className="flex-1 flex items-center justify-center"
-  >
-    <div className="text-center max-w-md px-6">
-      <span className="text-5xl mb-6 block">🎬</span>
-      <h2 className="text-2xl font-bold text-foreground mb-3 tracking-tight">
-        Welcome to AskTheVideo
-      </h2>
-      <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-        Paste a YouTube URL in the sidebar to get started. You can ask questions,
-        get summaries, compare videos, and more.
-      </p>
-      <div className="grid grid-cols-2 gap-3 text-left">
-        {[
-          { icon: "💬", label: "Ask questions about video content" },
-          { icon: "📝", label: "Get summaries with timestamps" },
-          { icon: "🔍", label: "Search across multiple videos" },
-          { icon: "⚡", label: "Instant AI-powered answers" },
-        ].map((item, i) => (
-          <motion.div
-            key={item.label}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: 0.3 + i * 0.1 }}
-            className="bg-card border border-border rounded-card p-3 text-xs text-muted-foreground flex items-start gap-2"
-          >
-            <span className="text-base shrink-0">{item.icon}</span>
-            {item.label}
-          </motion.div>
-        ))}
-      </div>
-      <div className="mt-6">
-        <p className="text-xs text-muted-foreground mb-2">Try asking:</p>
-        <div className="flex flex-wrap justify-center gap-2">
-          {EXAMPLE_PROMPTS.map((prompt) => (
-            <button
-              key={prompt}
-              onClick={() => onSelectPrompt(prompt)}
-              className="text-xs px-3 py-1.5 rounded-full border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors cursor-pointer"
+const WelcomeScreen = ({ onSelectPrompt }: { onSelectPrompt: (text: string) => void }) => {
+  const container = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: 0.15, delayChildren: 0.4 },
+    },
+  };
+  const fadeUp = {
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="flex-1 flex items-center justify-center"
+    >
+      <div className="text-center max-w-md px-6">
+        <span className="text-5xl mb-6 block">🎬</span>
+        <h2 className="text-2xl font-bold text-foreground mb-3 tracking-tight">
+          Welcome to AskTheVideo
+        </h2>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+          Paste a YouTube URL in the sidebar to get started. You can ask questions,
+          get summaries, compare videos, and more.
+        </p>
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-2 gap-3 text-left"
+        >
+          {[
+            { icon: "💬", label: "Ask questions about video content" },
+            { icon: "📝", label: "Get summaries with timestamps" },
+            { icon: "🔍", label: "Search across multiple videos" },
+            { icon: "⚡", label: "Instant AI-powered answers" },
+          ].map((item) => (
+            <motion.div
+              key={item.label}
+              variants={fadeUp}
+              className="bg-card border border-border rounded-card p-3 text-xs text-muted-foreground flex items-start gap-2"
             >
-              {prompt}
-            </button>
+              <span className="text-base shrink-0">{item.icon}</span>
+              {item.label}
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.4 }}
+          className="mt-6"
+        >
+          <p className="text-xs text-muted-foreground mb-2">Try asking:</p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {EXAMPLE_PROMPTS.map((prompt) => (
+              <button
+                key={prompt}
+                onClick={() => onSelectPrompt(prompt)}
+                className="text-xs px-3 py-1.5 rounded-full border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors cursor-pointer"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
+        </motion.div>
       </div>
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 const MarkdownMessage = ({ content }: { content: string }) => (
   <ReactMarkdown
