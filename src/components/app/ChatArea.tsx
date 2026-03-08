@@ -1,8 +1,14 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ChatMessage } from "@/types/app";
-import { Send, User, Download } from "lucide-react";
+import { Send, User, Download, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import {
+  speechRecognitionSupported,
+  useSpeechRecognition,
+  speechSynthesisSupported,
+  useSpeechSynthesis,
+} from "@/hooks/use-speech";
 
 interface ChatAreaProps {
   messages: ChatMessage[];
@@ -168,6 +174,11 @@ const ChatArea = ({
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  const { isListening, startListening, stopListening } = useSpeechRecognition(
+    useCallback((text: string) => setInput((prev) => (prev ? prev + " " + text : text)), [])
+  );
+  const { isSpeaking, speak, stop } = useSpeechSynthesis();
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isThinking]);
@@ -280,6 +291,21 @@ const ChatArea = ({
                   ) : (
                     msg.content
                   )}
+                  {msg.role === "assistant" && speechSynthesisSupported && (
+                    <button
+                      onClick={() =>
+                        isSpeaking === msg.id ? stop() : speak(msg.content, msg.id)
+                      }
+                      title={isSpeaking === msg.id ? "Stop reading" : "Read aloud"}
+                      className="mt-2 p-1 rounded text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {isSpeaking === msg.id ? (
+                        <VolumeX className="w-3.5 h-3.5" />
+                      ) : (
+                        <Volume2 className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -307,6 +333,20 @@ const ChatArea = ({
             }
             className="flex-1 bg-secondary text-foreground text-sm border border-muted rounded-input px-4 py-3 placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:shadow-focus-ring transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           />
+          {speechRecognitionSupported && (
+            <button
+              onClick={isListening ? stopListening : startListening}
+              disabled={inputDisabled}
+              title={isListening ? "Stop listening" : "Voice input"}
+              className={`p-3 rounded-button transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
+                isListening
+                  ? "bg-destructive text-destructive-foreground animate-pulse"
+                  : "bg-secondary text-muted-foreground hover:text-foreground border border-muted"
+              }`}
+            >
+              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            </button>
+          )}
           <button
             onClick={handleSend}
             disabled={!input.trim() || inputDisabled}
