@@ -18,24 +18,15 @@ const DEFAULT_LIMITS: Limits = {
 
 const Index = () => {
   const isMobile = useIsMobile();
-  const [videos, setVideos] = useState<Video[]>([
-    { id: "dQw4w9WgXcQ", video_id: "dQw4w9WgXcQ", title: "How Large Language Models Work — A Visual Intro", channel: "3Blue1Brown", url: "https://youtube.com/watch?v=dQw4w9WgXcQ", duration: "26:14", selected: true },
-    { id: "jGwO_UgTS7I", video_id: "jGwO_UgTS7I", title: "Building RAG Applications with Vector Databases", channel: "Fireship", url: "https://youtube.com/watch?v=jGwO_UgTS7I", duration: "12:07", selected: true },
-    { id: "aircAruvnKk", video_id: "aircAruvnKk", title: "The Future of AI Agents — 2025 and Beyond", channel: "Two Minute Papers", url: "https://youtube.com/watch?v=aircAruvnKk", duration: "18:42", selected: false },
-  ]);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: "m1", role: "user", content: "Summarize the video on how large language models work", timestamp: new Date() },
-    { id: "m2", role: "assistant", content: "## Summary: How Large Language Models Work\n\nHere's a breakdown of the key concepts from the 3Blue1Brown video:\n\n1. **Tokenization** — Text is split into subword tokens that the model processes numerically.\n2. **Embeddings** — Each token maps to a high-dimensional vector capturing semantic meaning.\n3. **Self-Attention** — The transformer weighs relationships between all tokens simultaneously, enabling rich context understanding.\n4. **Feed-Forward Layers** — Representations pass through neural network layers for deeper transformation.\n5. **Next-Token Prediction** — The model generates language by predicting the most probable next token.\n\n> 📌 **Key insight** from [12:34]: *\"The attention mechanism is what allows transformers to capture long-range dependencies that previous architectures struggled with.\"*\n\nThe video also explains how scaling laws predict performance improvements as models grow in size and data.", timestamp: new Date() },
-    { id: "m3", role: "user", content: "How does the RAG video explain chunking and vector storage?", timestamp: new Date() },
-    { id: "m4", role: "assistant", content: "## RAG: Chunking & Vector Storage\n\nFrom the Fireship video on building RAG applications:\n\n**Document Chunking:**\n- Documents are split into overlapping chunks (typically 500–1000 tokens)\n- Overlap ensures context isn't lost at chunk boundaries\n- Each chunk is converted into an embedding vector\n\n**Vector Storage & Retrieval:**\n- Embeddings are stored in a vector database (e.g., Pinecone, Weaviate)\n- At query time, the user's question is also embedded\n- Cosine similarity finds the most relevant chunks\n- Top-k chunks are injected into the LLM's context window\n\n> 📌 From [4:22]: *\"RAG is ideal when you need up-to-date information without the cost of retraining.\"*\n\n| Step | What Happens |\n|------|-------------|\n| **Ingest** | Chunk → Embed → Store in vector DB |\n| **Query** | Embed question → Similarity search → Retrieve top chunks |\n| **Generate** | Pass chunks + question to LLM → Get grounded answer |", timestamp: new Date() },
-  ]);
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoadingVideo, setIsLoadingVideo] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const streamMsgIdRef = useRef<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const [limits, setLimits] = useState<Limits>({ videos_loaded: 3, videos_max: 5, questions_used: 2, questions_max: 10, unlimited: false });
-  const [isInitializing, setIsInitializing] = useState(false);
+  const [limits, setLimits] = useState<Limits>(DEFAULT_LIMITS);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
 
   // Derived state
