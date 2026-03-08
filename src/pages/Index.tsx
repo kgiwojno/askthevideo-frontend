@@ -21,6 +21,7 @@ const Index = () => {
   const [isThinking, setIsThinking] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const streamMsgIdRef = useRef<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [limits, setLimits] = useState<Limits>(DEFAULT_LIMITS);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
@@ -144,23 +145,23 @@ const Index = () => {
   }, []);
 
   const handleToggleVideo = useCallback(async (id: string) => {
-    // Optimistic update
-    setVideos((prev) =>
-      prev.map((v) => (v.id === id ? { ...v, selected: !v.selected } : v))
-    );
+    let previousSelected: boolean | undefined;
+    setVideos((prev) => {
+      const video = prev.find((v) => v.id === id);
+      previousSelected = video?.selected;
+      return prev.map((v) => (v.id === id ? { ...v, selected: !v.selected } : v));
+    });
     try {
-      const current = videos.find((v) => v.id === id);
       await apiCall("PATCH", `/api/videos/${id}`, {
-        selected: !(current?.selected ?? true),
+        selected: !previousSelected,
       });
     } catch (err: any) {
-      // Revert on failure
       setVideos((prev) =>
         prev.map((v) => (v.id === id ? { ...v, selected: !v.selected } : v))
       );
       toast.error(err?.error || "Failed to update video.");
     }
-  }, [videos]);
+  }, []);
 
   const handleSendMessage = useCallback(
     async (text: string) => {
@@ -172,6 +173,11 @@ const Index = () => {
       };
       setMessages((prev) => [...prev, userMsg]);
       setIsThinking(true);
+
+      // Cancel any in-flight stream
+      abortControllerRef.current?.abort();
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
 
       const assistantId = crypto.randomUUID();
       streamMsgIdRef.current = assistantId;
@@ -226,7 +232,8 @@ const Index = () => {
           if (err?.code === "QUESTION_LIMIT") {
             setLimits((prev) => ({ ...prev, questions_used: prev.questions_max ?? 10 }));
           }
-        }
+        },
+        controller.signal
       );
     },
     []

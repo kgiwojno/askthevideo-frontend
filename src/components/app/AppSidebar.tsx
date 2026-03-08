@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Video, Limits } from "@/types/app";
-import { Film, X, ChevronDown, ChevronRight, Coffee, MessageSquare, Key, Loader2 } from "lucide-react";
+import { X, ChevronDown, ChevronRight, Coffee, MessageSquare, Key, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface AppSidebarProps {

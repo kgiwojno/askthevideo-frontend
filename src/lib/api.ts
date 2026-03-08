@@ -84,7 +84,8 @@ export async function apiStreamCall(
   body: any,
   onToken: (token: string) => void,
   onDone: (fullText: string, data?: any) => void,
-  onError: (err: any) => void
+  onError: (err: any) => void,
+  abortSignal?: AbortSignal
 ): Promise<void> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -98,6 +99,7 @@ export async function apiStreamCall(
       method: "POST",
       headers,
       body: JSON.stringify(body),
+      signal: abortSignal,
     });
 
     // If stream endpoint doesn't exist (404/405), fall back
