@@ -93,7 +93,12 @@ const AppSidebar = ({
 
       {/* Video Library */}
       <div className="px-5 py-4 flex-1 overflow-y-auto">
-        <p className="text-sm font-semibold text-foreground mb-3">Loaded Videos</p>
+        <p className="text-sm font-semibold text-foreground mb-1">Loaded Videos</p>
+        {videos.length > 0 && (
+          <p className="text-[10px] text-muted-foreground mb-3">
+            Click a video to select/deselect it as context for your questions.
+          </p>
+        )}
         {videos.length === 0 ? (
           <p className="text-xs text-muted-foreground">No videos loaded yet.</p>
         ) : (

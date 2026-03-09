@@ -138,7 +138,15 @@ const Index = () => {
           chunk_count: v.chunk_count,
           status: v.status,
         };
-        setVideos((prev) => [...prev, newVideo]);
+        setVideos((prev) => {
+          const updated = [...prev, newVideo];
+          // Show first-use tip about video selection
+          if (updated.length === 2 && !localStorage.getItem("atv-selection-tip-shown")) {
+            localStorage.setItem("atv-selection-tip-shown", "1");
+            toast.info("Tip: Click videos in the sidebar to select which ones the AI uses as context for your questions.", { duration: 6000 });
+          }
+          return updated;
+        });
         if (data.limits) setLimits(data.limits);
 
         setMessages((prev) => [
