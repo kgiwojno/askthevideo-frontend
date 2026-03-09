@@ -29,6 +29,30 @@ const Index = () => {
   const [limits, setLimits] = useState<Limits>(DEFAULT_LIMITS);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
+  const [demoModalOpen, setDemoModalOpen] = useState(false);
+
+  // Keyboard shortcut: Press 'D' to toggle demo modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger if typing in an input/textarea
+      const target = e.target as HTMLElement;
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable
+      ) {
+        return;
+      }
+
+      if (e.key.toLowerCase() === "d" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        setDemoModalOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // Derived state
   const questionsRemaining = limits.unlimited
