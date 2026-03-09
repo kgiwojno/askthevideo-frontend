@@ -243,8 +243,10 @@ const AppSidebar = ({
 
         {/* Footer */}
         <div className="px-5 py-3 border-t border-border">
-          <p className="text-[11px] text-muted-foreground text-center">
-            Powered by Claude Sonnet 4.6 & Pinecone
+          <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
+            Powered by Claude Sonnet 4.6 · Pinecone
+            <br />
+            LangChain · LangGraph · Koyeb
           </p>
         </div>
       </div>
