@@ -22,6 +22,7 @@ function budgetColour(remaining: number): string {
 
 const externalLinks = [
   { label: "LangSmith", url: "https://eu.smith.langchain.com" },
+  { label: "Pinecone", url: "https://app.pinecone.io" },
   { label: "Koyeb", url: "https://app.koyeb.com" },
   { label: "Google Analytics", url: "https://analytics.google.com" },
   { label: "Discord", url: "https://discord.com" },
