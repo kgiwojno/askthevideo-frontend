@@ -5,6 +5,7 @@ import AppSidebar from "@/components/app/AppSidebar";
 import MobileSidebarDrawer from "@/components/app/MobileSidebarDrawer";
 import ChatArea from "@/components/app/ChatArea";
 import ConnectionStatus from "@/components/app/ConnectionStatus";
+import DemoModal from "@/components/app/DemoModal";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 
