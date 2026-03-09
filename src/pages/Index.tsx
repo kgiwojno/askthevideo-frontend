@@ -115,6 +115,13 @@ const Index = () => {
   const handleLoadVideo = useCallback(
     async (url: string) => {
       if (!isUnlimited && videos.length >= (limits.videos_max ?? 5)) return;
+
+      // Prevent loading duplicate videos
+      const videoId = url.match(/(?:v=|\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1];
+      if (videoId && videos.some((v) => v.video_id === videoId)) {
+        toast.error("This video is already loaded.");
+        return;
+      }
       setIsLoadingVideo(true);
 
       try {
