@@ -40,10 +40,10 @@ const ThinkingIndicator = () => (
 );
 
 const EXAMPLE_PROMPTS = [
-  "Summarize this video",
-  "What are the key points?",
-  "Explain the main argument",
+  "Summarise this video",
   "List all topics covered",
+  "What are the most important moments?",
+  "Compare what the selected videos say about topic of",
 ];
 
 const WelcomeScreen = ({ onSelectPrompt }: { onSelectPrompt: (text: string) => void }) => {
