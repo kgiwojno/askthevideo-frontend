@@ -17,8 +17,20 @@ export const DEMO_VIDEOS: DemoVideo[] = [
     url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
-    label: "Lex Fridman #434 - Aravind Srinivas (Perplexity CEO)",
+    label: "Lex Fridman - Aravind Srinivas (Perplexity CEO)",
     url: "https://www.youtube.com/watch?v=e-gwvmhyU7A",
+  },
+  {
+    label: "Lex Fridman - Andrej Karpathy",
+    url: "https://www.youtube.com/watch?v=cdiD-9MMpb0",
+  },
+  {
+    label: "3Blue1Brown - But what is a neural network?",
+    url: "https://www.youtube.com/watch?v=aircAruvnKk",
+  },
+  {
+    label: "3Blue1Brown - But what is a GPT?",
+    url: "https://www.youtube.com/watch?v=wjZofJX0v4M",
   },
   {
     label: "Broken Link (Test)",
