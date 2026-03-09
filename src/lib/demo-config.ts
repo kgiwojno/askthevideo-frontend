@@ -41,23 +41,19 @@ export const DEMO_VIDEOS: DemoVideo[] = [
 
 export const DEMO_QUESTIONS: DemoQuestion[] = [
   {
-    label: "Summary",
-    question: "Can you provide a concise summary of the video content?",
+    label: "Summarise",
+    question: "Summarise this video",
   },
   {
-    label: "Key Points",
-    question: "What are the main key points discussed in this video?",
+    label: "Topics",
+    question: "List all topics covered",
   },
   {
-    label: "Technical Details",
-    question: "What technical concepts or tools are mentioned?",
-  },
-  {
-    label: "Timestamps",
-    question: "What are the most important moments to watch?",
+    label: "Key Moments",
+    question: "What are the most important moments?",
   },
   {
     label: "Compare",
-    question: "Compare what the selected videos say about this topic",
+    question: "Compare what the selected videos say about topic of",
   },
 ];
