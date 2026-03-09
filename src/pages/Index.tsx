@@ -330,6 +330,15 @@ const Index = () => {
           limitReached={limitReached}
         />
       </div>
+
+      {/* Demo mode modal - press D to toggle */}
+      <DemoModal
+        open={demoModalOpen}
+        onOpenChange={setDemoModalOpen}
+        onLoadVideo={handleLoadVideo}
+        onSendMessage={handleSendMessage}
+        hasVideos={videos.length > 0}
+      />
     </div>
   );
 };
