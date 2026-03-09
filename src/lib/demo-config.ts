@@ -13,14 +13,17 @@ export interface DemoQuestion {
 
 export const DEMO_VIDEOS: DemoVideo[] = [
   {
-    label: "Video 1",
+    label: "Rick Astley - Never Gonna Give You Up",
     url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    description: "First demo video",
   },
   {
-    label: "Video 2",
+    label: "Lex Fridman #434 - Aravind Srinivas (Perplexity CEO)",
     url: "https://www.youtube.com/watch?v=e-gwvmhyU7A",
-    description: "Second demo video",
+  },
+  {
+    label: "Broken Link (Test)",
+    url: "https://www.youtube.com/watch?v=INVALID12345",
+    description: "For testing error handling",
   },
 ];
 
