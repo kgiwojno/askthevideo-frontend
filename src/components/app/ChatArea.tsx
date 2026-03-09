@@ -317,27 +317,6 @@ const ChatArea = ({
             ))}
           </AnimatePresence>
           {isThinking && <ThinkingIndicator />}
-          {/* Show "try asking" chips until user sends first question */}
-          {hasVideos && !messages.some((m) => m.role === "user") && (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground mb-2">Try asking:</p>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {EXAMPLE_PROMPTS.map((prompt) => (
-                    <button
-                      key={prompt}
-                      onClick={() => {
-                        setInput(prompt);
-                      }}
-                      className="text-xs px-3 py-1.5 rounded-full border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors cursor-pointer"
-                    >
-                      {prompt}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
           <div ref={bottomRef} />
         </div>
       )}
