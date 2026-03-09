@@ -13,19 +13,14 @@ export interface DemoQuestion {
 
 export const DEMO_VIDEOS: DemoVideo[] = [
   {
-    label: "Tech Talk",
+    label: "Video 1",
     url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    description: "Sample tech presentation",
+    description: "First demo video",
   },
   {
-    label: "Tutorial",
-    url: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
-    description: "Quick tutorial video",
-  },
-  {
-    label: "Conference Keynote",
-    url: "https://www.youtube.com/watch?v=9bZkp7q19f0",
-    description: "Industry keynote speech",
+    label: "Video 2",
+    url: "https://www.youtube.com/watch?v=e-gwvmhyU7A",
+    description: "Second demo video",
   },
 ];
 
