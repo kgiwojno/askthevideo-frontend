@@ -1,73 +1,132 @@
-# Welcome to your Lovable project
+# AskTheVideo — Frontend
 
-## Project info
+React frontend for [AskTheVideo](https://github.com/kgiwojno/askthevideo), an AI-powered app that lets you ask questions about YouTube videos and get intelligent, context-aware answers.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Tech Stack
 
-## How can I edit this code?
+- **React 18** + **TypeScript** — UI framework
+- **Vite 7** — build tool & dev server
+- **Tailwind CSS** — utility-first styling
+- **shadcn/ui** (Radix UI) — component library
+- **Framer Motion** — animations
+- **React Router** — client-side routing
+- **TanStack React Query** — server state management
+- **React Hook Form** + **Zod** — form handling & validation
+- **Recharts** — admin dashboard charts
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- **YouTube Video Loading** — paste a URL, load transcript context (up to 5 videos)
+- **AI Chat Interface** — ask questions about loaded videos with streaming (SSE) responses
+- **Voice Input/Output** — dictate questions via mic, listen to answers via speech synthesis
+- **Markdown Responses** — AI answers rendered as rich markdown
+- **Chat Export** — download conversation history as `.md`
+- **Access Key System** — free tier with usage limits, unlimited with access key
+- **Admin Dashboard** (`/admin`) — session metrics, cost tracking, Pinecone stats, event log
+- **Demo Mode** — press `D` for keyboard shortcuts to quickly load demo videos & questions
+- **Offline Handling** — connection status banner with retry logic (exponential backoff)
+- **Mobile Responsive** — drawer sidebar, touch-friendly UI
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Project Structure
 
-Changes made via Lovable will be committed automatically to this repo.
+```
+src/
+├── pages/             # Route pages (Index, Admin, NotFound)
+├── components/
+│   ├── app/           # App-specific components (ChatArea, AppSidebar, etc.)
+│   ├── admin/         # Admin dashboard components
+│   └── ui/            # shadcn/ui base components
+├── lib/
+│   ├── api.ts         # API client, SSE streaming, retry logic
+│   ├── admin-api.ts   # Admin auth & metrics API
+│   └── demo-config.ts # Demo presets (videos & questions)
+├── hooks/             # Custom hooks (speech, mobile detection, toast)
+├── types/             # TypeScript interfaces (Video, ChatMessage, Limits)
+└── test/              # Vitest test setup
+```
 
-**Use your preferred IDE**
+## Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Node.js 18+
+- npm, yarn, or bun
 
-Follow these steps:
+### Installation
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+git clone https://github.com/kgiwojno/askthevideo-frontend.git
+cd askthevideo-frontend
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Development
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Starts the dev server at `http://localhost:8080`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The frontend expects the [backend API](https://github.com/kgiwojno/askthevideo) to be available at the same origin (all requests go to `/api/*`).
 
-**Use GitHub Codespaces**
+### Build & Deploy
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+The frontend is **not deployed independently**. It is built as static files and copied into the [backend repository](https://github.com/kgiwojno/askthevideo), which serves them from its Docker container. Both repos should be cloned side by side:
 
-## What technologies are used for this project?
+```
+FinalProject/
+├── askthevideo/            # backend (Docker)
+│   └── frontend/           # ← built frontend files go here
+└── askthevideo-frontend/   # this repo
+```
 
-This project is built with:
+A convenience script `update_frontend.sh` automates this:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+./update_frontend.sh
+```
 
-## How can I deploy this project?
+It pulls the latest changes, runs a production build, and copies the `dist/` output into `../askthevideo/frontend/`. After that, rebuild and redeploy the backend Docker container to pick up the new frontend.
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+You can also run the steps manually:
 
-## Can I connect a custom domain to my Lovable project?
+```bash
+npm run build                          # production build → dist/
+cp -r dist/* ../askthevideo/frontend/  # copy into backend repo
+```
 
-Yes, you can!
+Other build commands:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```bash
+npm run build:dev   # development mode build
+npm run preview     # preview the production build locally
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Lint & Test
+
+```bash
+npm run lint
+npm run test
+npm run test:watch
+```
+
+## API Endpoints (consumed)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/status` | Get session limits |
+| `POST` | `/api/videos` | Load a video |
+| `GET` | `/api/videos` | List loaded videos |
+| `DELETE` | `/api/videos/:id` | Remove a video |
+| `PATCH` | `/api/videos/:id` | Toggle video selection |
+| `POST` | `/api/ask/stream` | Stream AI answer (SSE) |
+| `POST` | `/api/ask` | Non-streaming fallback |
+| `GET` | `/api/history` | Fetch chat history |
+| `POST` | `/api/auth` | Validate access key |
+| `POST` | `/api/admin/auth` | Admin login |
+| `GET` | `/api/admin/metrics` | Admin dashboard metrics |
+
+## Related
+
+- **Backend**: [kgiwojno/askthevideo](https://github.com/kgiwojno/askthevideo)

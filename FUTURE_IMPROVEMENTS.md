@@ -2,10 +2,7 @@
 
 ## Planned
 
-- ~~**Video Selection UX Documentation**~~: Added helper text above the video list and a one-time toast notification explaining the click-to-select feature.
-- ~~**Video Selection Backend Bug**~~: Fixed — the API now filters by `selected: true` videos when sending context to the AI.
-- ~~**Bundle Size Optimization**~~: Added `manualChunks` in `vite.config.ts` to split `recharts`, `react-markdown`, `framer-motion`, and `@radix-ui/*` into separate chunks.
-- **Update Browserslist DB**: Run `npx update-browserslist-db@latest` to refresh the `caniuse-lite` database and suppress the outdated browserslist build warning.
+_No planned improvements at this time._
 
 ## Done ✅
 
@@ -19,3 +16,7 @@
 - ~~**Loading Skeleton**~~: "Connecting…" screen on initial session load.
 - ~~**Retry Logic**~~: Exponential backoff (2 retries) for transient API failures.
 - ~~**Welcome Screen Enhancements**~~: Staggered animations, clickable example prompts, step indicator, radial gradient background.
+- ~~**Video Selection UX Documentation**~~: Added helper text above the video list and a one-time toast notification explaining the click-to-select feature.
+- ~~**Video Selection Backend Bug**~~: Fixed — the API now filters by `selected: true` videos when sending context to the AI.
+- ~~**Bundle Size Optimization**~~: Added `manualChunks` in `vite.config.ts` to split `recharts`, `react-markdown`, `framer-motion`, and `@radix-ui/*` into separate chunks.
+- ~~**Update Browserslist DB**~~: Updated `caniuse-lite` database to suppress the outdated browserslist build warning.
