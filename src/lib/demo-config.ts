@@ -33,6 +33,14 @@ export const DEMO_VIDEOS: DemoVideo[] = [
     url: "https://www.youtube.com/watch?v=wjZofJX0v4M",
   },
   {
+    label: "Andrej Karpathy - Intro to Large Language Models",
+    url: "https://www.youtube.com/watch?v=zjkBMFhNj_g",
+  },
+  {
+    label: "Andrej Karpathy - Let's build GPT: from scratch, in code, spelled out",
+    url: "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+  },
+  {
     label: "Broken Link (Test)",
     url: "https://www.youtube.com/watch?v=INVALID12345",
     description: "For testing error handling",

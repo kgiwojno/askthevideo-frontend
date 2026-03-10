@@ -174,48 +174,50 @@ const AppSidebar = ({
         <div className="h-px bg-border mx-5" />
 
         {/* Access Key */}
-        <div className="px-5 py-3">
-          <button
-            onClick={() => setKeyExpanded(!keyExpanded)}
-            className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors w-full"
-          >
-            <Key className="w-3.5 h-3.5" />
-            <span>Access Key</span>
-            {keyExpanded ? (
-              <ChevronDown className="w-3 h-3 ml-auto" />
-            ) : (
-              <ChevronRight className="w-3 h-3 ml-auto" />
-            )}
-          </button>
-          <AnimatePresence>
-            {keyExpanded && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="overflow-hidden"
-              >
-                <div className="flex gap-2 mt-2">
-                  <input
-                    type="password"
-                    value={accessKey}
-                    onChange={(e) => setAccessKey(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleKeySubmit()}
-                    placeholder="Enter key"
-                    className="flex-1 bg-secondary text-foreground text-xs border border-muted rounded-input px-2.5 py-1.5 placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:shadow-focus-ring transition-colors"
-                  />
-                  <button
-                    onClick={handleKeySubmit}
-                    disabled={!accessKey.trim()}
-                    className="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1.5 rounded-input hover:opacity-85 transition-opacity disabled:opacity-40"
-                  >
-                    Go
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+        {!isUnlimited && (
+          <div className="px-5 py-3">
+            <button
+              onClick={() => setKeyExpanded(!keyExpanded)}
+              className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors w-full"
+            >
+              <Key className="w-3.5 h-3.5" />
+              <span>Access Key</span>
+              {keyExpanded ? (
+                <ChevronDown className="w-3 h-3 ml-auto" />
+              ) : (
+                <ChevronRight className="w-3 h-3 ml-auto" />
+              )}
+            </button>
+            <AnimatePresence>
+              {keyExpanded && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex gap-2 mt-2">
+                    <input
+                      type="password"
+                      value={accessKey}
+                      onChange={(e) => setAccessKey(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleKeySubmit()}
+                      placeholder="Enter key"
+                      className="flex-1 bg-secondary text-foreground text-xs border border-muted rounded-input px-2.5 py-1.5 placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:shadow-focus-ring transition-colors"
+                    />
+                    <button
+                      onClick={handleKeySubmit}
+                      disabled={!accessKey.trim()}
+                      className="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1.5 rounded-input hover:opacity-85 transition-opacity disabled:opacity-40"
+                    >
+                      Go
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
 
         <div className="h-px bg-border mx-5" />
 
