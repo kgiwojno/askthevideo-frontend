@@ -1,4 +1,5 @@
 // Demo mode configuration - edit these to customize your presentation shortcuts
+// NOTE: Keep video labels ≤ 52 characters to avoid overflow in the DemoModal (sm:max-w-md)
 
 export interface DemoVideo {
   label: string;
@@ -37,7 +38,7 @@ export const DEMO_VIDEOS: DemoVideo[] = [
     url: "https://www.youtube.com/watch?v=zjkBMFhNj_g",
   },
   {
-    label: "Andrej Karpathy - Let's build GPT: from scratch, in code, spelled out",
+    label: "Andrej Karpathy - Let's build GPT: from scra...",
     url: "https://www.youtube.com/watch?v=kCc8FmEb1nY",
   },
   {
