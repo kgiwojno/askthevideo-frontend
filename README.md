@@ -31,18 +31,22 @@ React frontend for [AskTheVideo](https://github.com/kgiwojno/askthevideo), an AI
 
 ```
 src/
-├── pages/             # Route pages (Index, Admin, NotFound)
+├── pages/                 # Route pages (Index, Admin, NotFound)
 ├── components/
-│   ├── app/           # App-specific components (ChatArea, AppSidebar, etc.)
-│   ├── admin/         # Admin dashboard components
-│   └── ui/            # shadcn/ui base components
+│   ├── app/               # App-specific components (ChatArea, AppSidebar, etc.)
+│   ├── admin/             # Admin dashboard components
+│   ├── ui/                # shadcn/ui base components
+│   └── ErrorBoundary.tsx  # Crash recovery UI
 ├── lib/
-│   ├── api.ts         # API client, SSE streaming, retry logic
-│   ├── admin-api.ts   # Admin auth & metrics API
-│   └── demo-config.ts # Demo presets (videos & questions)
-├── hooks/             # Custom hooks (speech, mobile detection, toast)
-├── types/             # TypeScript interfaces (Video, ChatMessage, Limits)
-└── test/              # Vitest test setup
+│   ├── api.ts             # API client, SSE streaming, retry logic, timing monitor
+│   ├── admin-api.ts       # Admin auth & metrics API
+│   └── demo-config.ts     # Demo presets (videos & questions)
+├── hooks/                 # Custom hooks (speech, mobile detection, toast)
+├── types/                 # TypeScript interfaces (Video, ChatMessage, Limits)
+└── test/                  # Vitest test setup
+
+docs/                      # Original design specs (kept for project history)
+streamlit/                 # Early Streamlit prototype specs (kept for project history)
 ```
 
 ## Getting Started
@@ -126,6 +130,17 @@ npm run test:watch
 | `POST` | `/api/auth` | Validate access key |
 | `POST` | `/api/admin/auth` | Admin login |
 | `GET` | `/api/admin/metrics` | Admin dashboard metrics |
+
+## Debugging
+
+All API calls log timing to the browser console:
+
+```
+[API] POST /api/videos — 1234ms (ok)
+[API] STREAM /api/ask/stream — 5678ms (ok)
+```
+
+Full timing history is available in DevTools via `window.__apiTimings`.
 
 ## Related
 

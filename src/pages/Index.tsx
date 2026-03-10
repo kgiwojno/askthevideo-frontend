@@ -141,9 +141,13 @@ const Index = () => {
         setVideos((prev) => {
           const updated = [...prev, newVideo];
           // Show first-use tip about video selection
-          if (updated.length === 2 && !localStorage.getItem("atv-selection-tip-shown")) {
-            localStorage.setItem("atv-selection-tip-shown", "1");
-            toast.info("Tip: Click videos in the sidebar to select which ones the AI uses as context for your questions.", { duration: 6000 });
+          try {
+            if (updated.length === 2 && !localStorage.getItem("atv-selection-tip-shown")) {
+              localStorage.setItem("atv-selection-tip-shown", "1");
+              toast.info("Tip: Click videos in the sidebar to select which ones the AI uses as context for your questions.", { duration: 6000 });
+            }
+          } catch {
+            // localStorage may be unavailable
           }
           return updated;
         });

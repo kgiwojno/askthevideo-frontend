@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Video, Limits } from "@/types/app";
-import { X, ChevronDown, ChevronRight, Coffee, MessageSquare, Key, Loader2 } from "lucide-react";
+import { X, ChevronDown, ChevronRight, Coffee, MessageSquare, Key, Loader2, Youtube } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface AppSidebarProps {
@@ -119,9 +119,18 @@ const AppSidebar = ({
                 >
                   <img
                     src={`https://img.youtube.com/vi/${video.video_id}/default.jpg`}
-                    alt=""
+                    alt={video.title}
                     className="w-16 h-9 rounded object-cover shrink-0 bg-muted"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      target.style.display = "none";
+                      if (fallback) fallback.style.display = "flex";
+                    }}
                   />
+                  <div className="w-16 h-9 rounded shrink-0 bg-muted items-center justify-center" style={{ display: "none" }}>
+                    <Youtube className="w-5 h-5 text-muted-foreground" />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <span className="block truncate text-foreground text-xs leading-tight">
                       {video.title.length > 40

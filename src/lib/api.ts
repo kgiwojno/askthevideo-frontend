@@ -1,5 +1,7 @@
 import { ApiError } from "@/types/app";
 
+const API_TIMEOUT_MS = 60_000;
+
 let sessionId: string | null = null;
 
 export function getSessionId() {
@@ -14,6 +16,49 @@ async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// In-memory API timing log — accessible via window.__apiTimings in DevTools
+interface ApiTiming {
+  method: string;
+  path: string;
+  status: "ok" | "error" | "timeout";
+  durationMs: number;
+  timestamp: string;
+}
+
+const apiTimings: ApiTiming[] = [];
+(window as any).__apiTimings = apiTimings;
+
+function logTiming(method: string, path: string, startMs: number, status: "ok" | "error" | "timeout") {
+  const durationMs = Math.round(performance.now() - startMs);
+  const entry: ApiTiming = {
+    method,
+    path,
+    status,
+    durationMs,
+    timestamp: new Date().toISOString(),
+  };
+  apiTimings.push(entry);
+  console.log(`[API] ${method} ${path} — ${durationMs}ms (${status})`);
+}
+
+export function getApiTimings(): ApiTiming[] {
+  return apiTimings;
+}
+
+function createTimeoutSignal(existingSignal?: AbortSignal): { signal: AbortSignal; clear: () => void } {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort("Request timeout"), API_TIMEOUT_MS);
+
+  if (existingSignal) {
+    existingSignal.addEventListener("abort", () => controller.abort(existingSignal.reason));
+  }
+
+  return {
+    signal: controller.signal,
+    clear: () => clearTimeout(timeoutId),
+  };
+}
+
 export async function apiCall<T = any>(
   method: string,
   path: string,
@@ -26,6 +71,9 @@ export async function apiCall<T = any>(
   let lastError: any;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const start = performance.now();
+    const { signal, clear } = createTimeoutSignal();
+
     try {
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
@@ -38,7 +86,10 @@ export async function apiCall<T = any>(
         method,
         headers,
         body: body ? JSON.stringify(body) : undefined,
+        signal,
       });
+
+      clear();
 
       const data = await res.json();
 
@@ -52,11 +103,24 @@ export async function apiCall<T = any>(
           error: data.error || "An unexpected error occurred.",
           code: data.code || "INTERNAL_ERROR",
         };
+        logTiming(method, path, start, "error");
         throw err;
       }
 
+      logTiming(method, path, start, "ok");
       return data as T;
     } catch (err: any) {
+      clear();
+
+      if (err?.name === "AbortError") {
+        logTiming(method, path, start, "timeout");
+        lastError = { error: "Request timed out.", code: "TIMEOUT" };
+        throw lastError;
+      }
+
+      if (!lastError || err !== lastError) {
+        logTiming(method, path, start, "error");
+      }
       lastError = err;
 
       // Don't retry client errors (4xx) or known API errors with codes
@@ -87,6 +151,7 @@ export async function apiStreamCall(
   onError: (err: any) => void,
   abortSignal?: AbortSignal
 ): Promise<void> {
+  const start = performance.now();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
@@ -94,13 +159,18 @@ export async function apiStreamCall(
     headers["X-Session-ID"] = sessionId;
   }
 
+  const { signal, clear } = createTimeoutSignal(abortSignal);
+
   try {
     const res = await fetch(path, {
       method: "POST",
       headers,
       body: JSON.stringify(body),
-      signal: abortSignal,
+      signal,
     });
+
+    // Connection established — clear the timeout, streaming can take longer
+    clear();
 
     // If stream endpoint doesn't exist (404/405), fall back
     if (res.status === 404 || res.status === 405) {
@@ -136,6 +206,7 @@ export async function apiStreamCall(
         const payload = trimmed.slice(6);
 
         if (payload === "[DONE]") {
+          logTiming("STREAM", path, start, "ok");
           onDone(accumulated);
           return;
         }
@@ -155,6 +226,7 @@ export async function apiStreamCall(
 
           // Final message with limits
           if (parsed.limits) {
+            logTiming("STREAM", path, start, "ok");
             onDone(accumulated, parsed);
             return;
           }
@@ -165,9 +237,19 @@ export async function apiStreamCall(
     }
 
     // Stream ended without [DONE] — still complete
+    logTiming("STREAM", path, start, "ok");
     onDone(accumulated);
   } catch (err: any) {
+    clear();
+
+    if (err?.name === "AbortError") {
+      logTiming("STREAM", path, start, "timeout");
+      onError({ error: "Request timed out.", code: "TIMEOUT" });
+      return;
+    }
+
     if (err?.fallback) {
+      logTiming("STREAM", path, start, "error");
       // Fallback to non-streaming endpoint
       try {
         const data = await apiCall("POST", "/api/ask", body);
@@ -177,6 +259,7 @@ export async function apiStreamCall(
         onError(fallbackErr);
       }
     } else {
+      logTiming("STREAM", path, start, "error");
       onError(err);
     }
   }
