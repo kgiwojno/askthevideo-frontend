@@ -18,6 +18,10 @@ export const DEMO_VIDEOS: DemoVideo[] = [
     url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
+    label: "Tim Minchin - UWA Address",
+    url: "https://www.youtube.com/watch?v=yoEezZD71sc",
+  },
+  {
     label: "Lex Fridman - Aravind Srinivas (Perplexity CEO)",
     url: "https://www.youtube.com/watch?v=e-gwvmhyU7A",
   },
@@ -28,6 +32,10 @@ export const DEMO_VIDEOS: DemoVideo[] = [
   {
     label: "3Blue1Brown - But what is a neural network?",
     url: "https://www.youtube.com/watch?v=aircAruvnKk",
+  },
+  {
+    label: "3Blue1Brown - Gradient descent, how neural...",
+    url: "https://www.youtube.com/watch?v=IHZwWFHWa-w",
   },
   {
     label: "3Blue1Brown - But what is a GPT?",
