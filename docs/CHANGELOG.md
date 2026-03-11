@@ -32,3 +32,6 @@
 - **Removed unused `NavLink` component**: Deleted `src/components/NavLink.tsx` — was never imported anywhere.
 - **Deleted `README_lovable.md`**: Removed auto-generated Lovable boilerplate with placeholder URLs, redundant with the proper `README.md`.
 - **Updated `README.md`**: Added `ErrorBoundary` to project structure, documented `docs/` and `streamlit/` directories, added Debugging section for API timing monitor.
+- **Created `HANDOFF_ASKTHEVIDEO_FRONTEND.md`**: Comprehensive handoff document for final presentation preparation, covering project evolution, features, deviations from specs, what worked/didn't, technical debt, and demo talking points.
+- **Reorganised documentation into `docs/`**: Moved all project docs (`CHANGELOG.md`, `FUTURE_IMPROVEMENTS.md`, `HANDOFF_ASKTHEVIDEO_FRONTEND.md`) into `docs/`. Moved original specs into `docs/spec/`. Moved Streamlit prototype and draft specs from `tmp/` into `docs/spec/streamlit/`. Removed old `streamlit/` and `tmp/` directories. Created `docs/README.md` as documentation index.
+- **Deleted stale files**: Removed `bun.lock`, `bun.lockb`, `.DS_Store`, and `.README.md.swp`.

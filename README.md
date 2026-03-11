@@ -45,8 +45,11 @@ src/
 ├── types/                 # TypeScript interfaces (Video, ChatMessage, Limits)
 └── test/                  # Vitest test setup
 
-docs/                      # Original design specs (kept for project history)
-streamlit/                 # Early Streamlit prototype specs (kept for project history)
+docs/                      # All project documentation
+├── HANDOFF_*.md           # Presentation handoff document
+├── CHANGELOG.md           # Change log
+├── FUTURE_IMPROVEMENTS.md # Tracked issues & improvements
+└── spec/                  # Original planning specs & Streamlit prototype
 ```
 
 ## Getting Started
