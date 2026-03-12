@@ -48,4 +48,7 @@
 - **Anonymous user tracking** (`src/lib/api.ts`): On first visit, generates a UUID stored in localStorage as `atv_uid`. Sent as `X-User-ID` header on all API requests (`/api/videos`, `/api/ask`, `/api/ask/stream`) alongside the existing `X-Session-ID`.
 - **Admin Users card** (`src/components/admin/AdminDashboard.tsx`, `src/types/admin.ts`): New "Users" section in admin dashboard showing Total Users, Returning Users, Avg Sessions/User, and Avg Questions/User. Added `AdminUserStats` type.
 - **Admin session persistence** (`src/pages/Admin.tsx`): Admin token is now stored in `sessionStorage`. Survives page reloads without re-entering the password; cleared when the browser tab is closed. Token is re-validated with the backend on restore.
-- **User session persistence** (`src/lib/api.ts`): Session ID is now stored in `sessionStorage`. On reload, the frontend sends the same session ID so the backend restores loaded videos, chat history, limits, and access key status. Cleared when the tab is closed.
+- **User session persistence** (`src/lib/api.ts`, `src/pages/Index.tsx`): Session ID is now stored in `sessionStorage`. On reload, the frontend sends the same session ID so the backend restores loaded videos, chat history, limits, and access key status. Cleared when the tab is closed. Stale sessions are detected and cleared automatically.
+
+### Bug Fixes
+- **Question input password manager misdetection** (`src/components/app/ChatArea.tsx`): Added `autoComplete="off"`, `name="question"`, `id="question-input"`, and `aria-label` to the question input field to prevent LastPass and other password managers from flagging it as a payment card field.

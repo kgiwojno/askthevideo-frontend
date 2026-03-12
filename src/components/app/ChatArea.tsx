@@ -354,6 +354,10 @@ const ChatArea = ({
           )}
           <input
             type="text"
+            id="question-input"
+            name="question"
+            autoComplete="off"
+            aria-label="Ask a question about your videos"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}

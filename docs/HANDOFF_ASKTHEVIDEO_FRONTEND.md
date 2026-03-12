@@ -100,14 +100,23 @@ The frontend went through three distinct phases:
 ### Admin Dashboard (`/admin`)
 | Feature | Description | Status |
 |---------|-------------|--------|
-| Token Auth | Simple token-based login, no persistent sessions | Done |
+| Token Auth | Token-based login, persisted in sessionStorage across reloads | Done |
 | Real-time Metrics | Active sessions, CPU, RAM, uptime | Done |
 | Session Stats | Total queries, videos loaded, errors, alerts | Done |
-| Cost Tracking | Token usage, estimated cost, budget remaining | Done |
+| User Stats | Total users, returning users, avg sessions/user, avg questions/user | Done |
+| Cost Tracking | Token usage, estimated cost, cycle-based budget with progress bar | Done |
 | Pinecone Stats | Cached videos, total vectors, index fullness | Done |
-| Event Log | Last 50 events with colour-coded types | Done |
+| Event Log | Enriched log with filter tabs, sortable latency, tokens, cost, summary bar | Done |
 | External Links | Quick access to LangSmith, Koyeb, GA, Discord | Done |
 | Auto-refresh | Polls metrics every 30 seconds | Done |
+
+### Session Persistence
+| Feature | Description | Status |
+|---------|-------------|--------|
+| User Session | Session ID stored in sessionStorage; reloads restore videos, chat, limits, access key | Done |
+| Admin Session | Admin token stored in sessionStorage; re-validated on reload | Done |
+| Stale Session Handling | If backend doesn't recognise session ID, clears storage and starts fresh | Done |
+| Anonymous User Tracking | UUID (`atv_uid`) in localStorage, sent as `X-User-ID` header for analytics | Done |
 
 ### Resilience & Monitoring
 | Feature | Description | Status |
@@ -117,6 +126,7 @@ The frontend went through three distinct phases:
 | API Timing Monitor | Console logging + `window.__apiTimings` for debugging | Done |
 | Retry Logic | Exponential backoff (2 retries, 1s base delay) | Done |
 | Thumbnail Fallback | YouTube icon shown when thumbnail fails to load | Done |
+| Input Field Identity | Question input has `autoComplete="off"`, `name`, `id`, `aria-label` to prevent password manager misdetection | Done |
 
 ---
 
@@ -138,7 +148,10 @@ The frontend went through three distinct phases:
 ### From Admin Panel Spec
 - **Spec included Pinecone link**: Implementation added additional external links (LangSmith, Koyeb, Discord)
 - **Spec said "no data export"**: Chat export was added for the main app (not admin)
-- **Admin panel closely follows the spec** with minor styling differences
+- **Spec said "no persistent sessions"**: Admin token is now persisted in sessionStorage for convenience
+- **Spec didn't include enriched event log**: Added Tool, Latency, Tokens, Cost columns; filter tabs; summary bar; sortable columns
+- **Spec didn't include user tracking**: Added anonymous user tracking (`X-User-ID` header) and Users card in admin dashboard
+- **Spec used flat budget**: Replaced with cycle-based budget system ($5 cycles with progress bar)
 
 ---
 
@@ -188,7 +201,7 @@ The frontend went through three distinct phases:
 - **Free tier limits**: 5 videos, 10 questions per session
 - **Admin auto-refresh**: Every 30 seconds
 - **Retry logic**: 2 retries with exponential backoff (1s, 2s delays)
-- **Demo shortcuts**: 8 preset videos, 5 preset questions
+- **Demo shortcuts**: 10 preset videos, 5 preset questions
 
 ---
 
