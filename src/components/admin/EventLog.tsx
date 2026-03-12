@@ -44,6 +44,36 @@ function formatTokens(tokIn: number | undefined, tokOut: number | undefined): st
   return `${fmt(tokIn ?? 0)}/${fmt(tokOut ?? 0)}`;
 }
 
+function computeCost(tokIn: number | undefined, tokOut: number | undefined): number | null {
+  if (tokIn == null && tokOut == null) return null;
+  return ((tokIn ?? 0) / 1000 * 0.003) + ((tokOut ?? 0) / 1000 * 0.015);
+}
+
+function formatCost(cost: number | null): string | null {
+  if (cost == null) return null;
+  return `$${cost.toFixed(2)}`;
+}
+
+type FilterTab = "all" | "queries" | "videos" | "errors" | "sessions";
+
+const filterTabs: { key: FilterTab; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "queries", label: "Queries" },
+  { key: "videos", label: "Videos" },
+  { key: "errors", label: "Errors" },
+  { key: "sessions", label: "Sessions" },
+];
+
+function filterEvents(events: AdminEvent[], filter: FilterTab): AdminEvent[] {
+  switch (filter) {
+    case "queries": return events.filter((e) => e.type === "QUERY" || e.type === "KEY");
+    case "videos": return events.filter((e) => e.type === "VIDEO");
+    case "errors": return events.filter((e) => e.type === "ERROR");
+    case "sessions": return events.filter((e) => e.type === "SESSION");
+    default: return events;
+  }
+}
+
 function getEventLatency(event: AdminEvent): number | undefined {
   if (event.latency_ms != null) return event.latency_ms;
   if (event.type === "VIDEO" && event.fetch_ms != null) return event.fetch_ms;
@@ -100,11 +130,13 @@ const SummaryBar = ({ events }: SummaryBarProps) => {
       ? Math.round((cacheHits / (cacheHits + apiCalls)) * 100)
       : null;
 
-    return { avgLatency, totalTokensIn, totalTokensOut, cacheRate };
+    const totalCost = queryEvents.reduce((sum, e) => sum + (computeCost(e.tokens_in, e.tokens_out) ?? 0), 0);
+
+    return { avgLatency, totalTokensIn, totalTokensOut, cacheRate, totalCost };
   }, [events]);
 
   return (
-    <div className="flex gap-4 px-4 py-2 border-b border-border text-xs text-muted-foreground">
+    <div className="flex gap-4 px-4 py-2 border-b border-border text-xs text-muted-foreground flex-wrap">
       <span>
         Avg latency:{" "}
         <span className={stats.avgLatency != null ? latencyColor(stats.avgLatency) : ""}>
@@ -115,6 +147,12 @@ const SummaryBar = ({ events }: SummaryBarProps) => {
         Tokens:{" "}
         <span className="text-foreground">
           {formatTokens(stats.totalTokensIn, stats.totalTokensOut) ?? "—"}
+        </span>
+      </span>
+      <span>
+        Query cost:{" "}
+        <span className="text-foreground">
+          {stats.totalCost > 0 ? `$${stats.totalCost.toFixed(2)}` : "—"}
         </span>
       </span>
       <span>
@@ -133,15 +171,18 @@ interface EventLogProps {
 
 const EventLog = ({ events }: EventLogProps) => {
   const [sortByLatency, setSortByLatency] = useState<"asc" | "desc" | null>(null);
+  const [activeFilter, setActiveFilter] = useState<FilterTab>("all");
+
+  const filteredEvents = useMemo(() => filterEvents(events, activeFilter), [events, activeFilter]);
 
   const sortedEvents = useMemo(() => {
-    if (!sortByLatency) return events;
-    return [...events].sort((a, b) => {
+    if (!sortByLatency) return filteredEvents;
+    return [...filteredEvents].sort((a, b) => {
       const la = getEventLatency(a) ?? -1;
       const lb = getEventLatency(b) ?? -1;
       return sortByLatency === "desc" ? lb - la : la - lb;
     });
-  }, [events, sortByLatency]);
+  }, [filteredEvents, sortByLatency]);
 
   const toggleSort = () => {
     setSortByLatency((prev) => {
@@ -155,6 +196,21 @@ const EventLog = ({ events }: EventLogProps) => {
     <div className="bg-card border border-border rounded-lg overflow-hidden">
       <div className="px-4 py-3 border-b border-border">
         <h3 className="text-sm font-medium text-foreground">Recent Events</h3>
+      </div>
+      <div className="flex gap-1 px-4 py-2 border-b border-border">
+        {filterTabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveFilter(tab.key)}
+            className={`px-2.5 py-1 text-xs rounded transition-colors ${
+              activeFilter === tab.key
+                ? "bg-primary text-primary-foreground font-semibold"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
       <SummaryBar events={events} />
       <div className="overflow-auto max-h-[400px] p-2">
@@ -183,6 +239,7 @@ const EventLog = ({ events }: EventLogProps) => {
                   </span>
                 </th>
                 <th className="px-2 py-1.5 text-left text-muted-foreground font-normal">Tokens</th>
+                <th className="px-2 py-1.5 text-left text-muted-foreground font-normal">Cost</th>
                 <th className="px-2 py-1.5 text-left text-muted-foreground font-normal">Detail</th>
               </tr>
             </thead>
@@ -191,6 +248,7 @@ const EventLog = ({ events }: EventLogProps) => {
                 const latencyMs = getEventLatency(event);
                 const tool = getEventTool(event);
                 const tokens = formatTokens(event.tokens_in, event.tokens_out);
+                const cost = computeCost(event.tokens_in, event.tokens_out);
                 const detail = getEventDetail(event);
 
                 return (
@@ -212,6 +270,9 @@ const EventLog = ({ events }: EventLogProps) => {
                     </td>
                     <td className="px-2 py-1.5 text-foreground whitespace-nowrap">
                       {tokens ?? ""}
+                    </td>
+                    <td className="px-2 py-1.5 text-foreground whitespace-nowrap">
+                      {formatCost(cost) ?? ""}
                     </td>
                     <td className="px-2 py-1.5 text-foreground truncate max-w-[300px]">
                       {detail}
