@@ -18,8 +18,10 @@ export interface AdminCostMetrics {
   total_input_tokens: number;
   total_output_tokens: number;
   estimated_cost: number;
-  budget_total: number;
-  budget_remaining: number;
+  cycle_budget: number;
+  cycle_used: number;
+  total_spend: number;
+  total_loaded: number;
 }
 
 export interface AdminPineconeStats {

@@ -14,10 +14,10 @@ function formatNumber(n: number): string {
   return n.toLocaleString();
 }
 
-function budgetColour(remaining: number): string {
-  if (remaining > 2) return "text-green-400";
-  if (remaining > 0.5) return "text-yellow-400";
-  return "text-destructive";
+function cycleBarColor(pct: number): string {
+  if (pct < 60) return "bg-green-500";
+  if (pct <= 80) return "bg-yellow-500";
+  return "bg-destructive";
 }
 
 const externalLinks = [
@@ -129,11 +129,22 @@ const AdminDashboard = ({ token, onAuthError }: AdminDashboardProps) => {
             <MetricCard label="Input Tokens" value={formatNumber(cost.total_input_tokens)} />
             <MetricCard label="Output Tokens" value={formatNumber(cost.total_output_tokens)} />
             <MetricCard label="Estimated Cost" value={`$${cost.estimated_cost.toFixed(2)}`} />
-            <MetricCard
-              label="Budget Remaining"
-              value={`$${cost.budget_remaining.toFixed(2)}`}
-              className={budgetColour(cost.budget_remaining)}
-            />
+            <div className="bg-card border border-border rounded-lg p-4">
+              <p className="text-xs text-muted-foreground mb-2">Cycle Budget</p>
+              <p className="text-lg font-semibold">
+                ${cost.cycle_used.toFixed(2)} / ${cost.cycle_budget.toFixed(2)}
+              </p>
+              <div className="w-full h-2 bg-muted rounded-full mt-2 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${cycleBarColor(cost.cycle_budget > 0 ? (cost.cycle_used / cost.cycle_budget) * 100 : 0)}`}
+                  style={{ width: `${Math.min(cost.cycle_budget > 0 ? (cost.cycle_used / cost.cycle_budget) * 100 : 0, 100)}%` }}
+                />
+              </div>
+              <div className="flex justify-between mt-2 text-[11px] text-muted-foreground">
+                <span>Total spend: ${cost.total_spend.toFixed(2)}</span>
+                <span>Total loaded: ${cost.total_loaded.toFixed(2)}</span>
+              </div>
+            </div>
           </div>
         </section>
 
