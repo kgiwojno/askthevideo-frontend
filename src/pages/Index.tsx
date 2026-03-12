@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Video, ChatMessage, Limits } from "@/types/app";
-import { apiCall, apiStreamCall } from "@/lib/api";
+import { apiCall, apiStreamCall, clearSessionId } from "@/lib/api";
 import AppSidebar from "@/components/app/AppSidebar";
 import MobileSidebarDrawer from "@/components/app/MobileSidebarDrawer";
 import ChatArea from "@/components/app/ChatArea";
@@ -69,7 +69,10 @@ const Index = () => {
         if (data.limits) {
           setLimits(data.limits);
         }
-        // If session exists, restore state
+        // If session exists, restore state; otherwise clear stale session ID
+        if (!data.session_id) {
+          clearSessionId();
+        }
         if (data.session_id) {
           const [videosRes, historyRes] = await Promise.all([
             apiCall("GET", "/api/videos"),

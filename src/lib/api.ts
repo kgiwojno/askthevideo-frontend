@@ -2,7 +2,8 @@ import { ApiError } from "@/types/app";
 
 const API_TIMEOUT_MS = 60_000;
 
-let sessionId: string | null = null;
+const SESSION_STORAGE_KEY = "atv_session_id";
+let sessionId: string | null = sessionStorage.getItem(SESSION_STORAGE_KEY);
 
 function getUserId(): string {
   try {
@@ -24,6 +25,12 @@ export function getSessionId() {
 
 export function setSessionId(id: string) {
   sessionId = id;
+  try { sessionStorage.setItem(SESSION_STORAGE_KEY, id); } catch {}
+}
+
+export function clearSessionId() {
+  sessionId = null;
+  try { sessionStorage.removeItem(SESSION_STORAGE_KEY); } catch {}
 }
 
 async function delay(ms: number) {
@@ -110,7 +117,7 @@ export async function apiCall<T = any>(
 
       // Capture session ID from response
       if (data.session_id) {
-        sessionId = data.session_id;
+        setSessionId(data.session_id);
       }
 
       if (!res.ok) {
@@ -232,7 +239,7 @@ export async function apiStreamCall(
 
           // Capture session ID
           if (parsed.session_id) {
-            sessionId = parsed.session_id;
+            setSessionId(parsed.session_id);
           }
 
           if (parsed.token) {
