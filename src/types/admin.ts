@@ -30,10 +30,22 @@ export interface AdminPineconeStats {
 
 export interface AdminEvent {
   timestamp: string;
-  type: "QUERY" | "VIDEO" | "SESSION" | "KEY" | "ERROR" | "ALERT";
+  type: "QUERY" | "VIDEO" | "SESSION" | "KEY" | "ERROR" | "ALERT" | "TOOL";
   subtype: string;
   ip: string;
   detail: string;
+  // Enriched fields (optional, depend on event type)
+  tool?: string;
+  latency_ms?: number;
+  tokens_in?: number;
+  tokens_out?: number;
+  video_id?: string;
+  chunks?: number;
+  duration_s?: number;
+  fetch_ms?: number;
+  tier?: string;
+  questions?: number;
+  videos?: number;
 }
 
 export interface AdminMetrics {
