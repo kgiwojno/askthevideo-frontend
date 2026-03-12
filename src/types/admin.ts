@@ -50,11 +50,19 @@ export interface AdminEvent {
   videos?: number;
 }
 
+export interface AdminUserStats {
+  total_users: number;
+  returning_users: number;
+  avg_sessions_per_user: number;
+  avg_questions_per_user: number;
+}
+
 export interface AdminMetrics {
   realtime: AdminRealtimeMetrics;
   sessions: AdminSessionStats;
   cost: AdminCostMetrics;
   pinecone: AdminPineconeStats;
+  users: AdminUserStats;
   events: AdminEvent[];
   last_updated: string;
 }

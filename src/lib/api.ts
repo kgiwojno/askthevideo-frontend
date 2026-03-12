@@ -4,6 +4,20 @@ const API_TIMEOUT_MS = 60_000;
 
 let sessionId: string | null = null;
 
+function getUserId(): string {
+  try {
+    let uid = localStorage.getItem("atv_uid");
+    if (!uid) {
+      uid = crypto.randomUUID();
+      localStorage.setItem("atv_uid", uid);
+    }
+    return uid;
+  } catch {
+    // localStorage unavailable — generate per-session fallback
+    return crypto.randomUUID();
+  }
+}
+
 export function getSessionId() {
   return sessionId;
 }
@@ -77,6 +91,7 @@ export async function apiCall<T = any>(
     try {
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
+        "X-User-ID": getUserId(),
       };
       if (sessionId) {
         headers["X-Session-ID"] = sessionId;
@@ -154,6 +169,7 @@ export async function apiStreamCall(
   const start = performance.now();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    "X-User-ID": getUserId(),
   };
   if (sessionId) {
     headers["X-Session-ID"] = sessionId;

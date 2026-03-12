@@ -78,7 +78,7 @@ const AdminDashboard = ({ token, onAuthError }: AdminDashboardProps) => {
 
   if (!metrics) return null;
 
-  const { realtime, sessions, cost, pinecone, events } = metrics;
+  const { realtime, sessions, cost, pinecone, users, events } = metrics;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -122,7 +122,18 @@ const AdminDashboard = ({ token, onAuthError }: AdminDashboardProps) => {
           </div>
         </section>
 
-        {/* Row 3: API cost */}
+        {/* Row 3: User stats */}
+        <section>
+          <h2 className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Users</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <MetricCard label="Total Users" value={formatNumber(users.total_users)} />
+            <MetricCard label="Returning Users" value={formatNumber(users.returning_users)} />
+            <MetricCard label="Avg Sessions/User" value={users.avg_sessions_per_user.toFixed(1)} />
+            <MetricCard label="Avg Questions/User" value={users.avg_questions_per_user.toFixed(1)} />
+          </div>
+        </section>
+
+        {/* Row 4: API cost */}
         <section>
           <h2 className="text-xs uppercase tracking-wider text-muted-foreground mb-3">API Cost</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -148,7 +159,7 @@ const AdminDashboard = ({ token, onAuthError }: AdminDashboardProps) => {
           </div>
         </section>
 
-        {/* Row 4: Pinecone stats */}
+        {/* Row 5: Pinecone stats */}
         <section>
           <h2 className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Pinecone</h2>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
@@ -158,12 +169,12 @@ const AdminDashboard = ({ token, onAuthError }: AdminDashboardProps) => {
           </div>
         </section>
 
-        {/* Row 5: Event log */}
+        {/* Row 6: Event log */}
         <section>
           <EventLog events={events} />
         </section>
 
-        {/* Row 6: External links */}
+        {/* Row 7: External links */}
         <section>
           <h2 className="text-xs uppercase tracking-wider text-muted-foreground mb-3">External Dashboards</h2>
           <div className="flex flex-wrap gap-2">
