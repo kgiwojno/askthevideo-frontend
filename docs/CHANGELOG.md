@@ -35,3 +35,10 @@
 - **Created `HANDOFF_ASKTHEVIDEO_FRONTEND.md`**: Comprehensive handoff document for final presentation preparation, covering project evolution, features, deviations from specs, what worked/didn't, technical debt, and demo talking points.
 - **Reorganised documentation into `docs/`**: Moved all project docs (`CHANGELOG.md`, `FUTURE_IMPROVEMENTS.md`, `HANDOFF_ASKTHEVIDEO_FRONTEND.md`) into `docs/`. Moved original specs into `docs/spec/`. Moved Streamlit prototype and draft specs from `tmp/` into `docs/spec/streamlit/`. Removed old `streamlit/` and `tmp/` directories. Created `docs/README.md` as documentation index.
 - **Deleted stale files**: Removed `bun.lock`, `bun.lockb`, `.DS_Store`, and `.README.md.swp`.
+
+## 2026-03-12
+
+### Features
+- **Added 2 demo videos** (`src/lib/demo-config.ts`): Added "Tim Minchin - UWA Address" (pos 2) and "3Blue1Brown - Gradient descent, how neural..." (between the two existing 3Blue1Brown entries).
+- **Admin event log local timezone** (`src/components/admin/EventLog.tsx`): Timestamps are now converted from UTC to the user's local timezone. Displays in friendly format (e.g., "Mar 12 10:12:31" instead of raw ISO 8601).
+- **Admin event log table header** (`src/components/admin/EventLog.tsx`): Added column headers (Time, Type, Subtype, IP, Detail) with the user's timezone shown in the Time column (e.g., "Time (Europe/Warsaw)").
