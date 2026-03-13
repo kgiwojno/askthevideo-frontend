@@ -73,7 +73,7 @@ const DemoModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-4 max-h-[70vh] overflow-y-auto">
           {/* Video shortcuts */}
           <div>
             <h3 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
