@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Lock } from "lucide-react";
+
+const MAX_ATTEMPTS = 3;
+const LOCKOUT_SECONDS = 30;
 
 interface AdminLoginProps {
   onAuthenticate: (token: string) => Promise<boolean>;
@@ -9,18 +12,49 @@ const AdminLogin = ({ onAuthenticate }: AdminLoginProps) => {
   const [token, setToken] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [failCount, setFailCount] = useState(0);
+  const [lockoutRemaining, setLockoutRemaining] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const locked = lockoutRemaining > 0;
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  const startLockout = () => {
+    setLockoutRemaining(LOCKOUT_SECONDS);
+    timerRef.current = setInterval(() => {
+      setLockoutRemaining((prev) => {
+        if (prev <= 1) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          timerRef.current = null;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token.trim() || loading) return;
+    if (!token.trim() || loading || locked) return;
 
     setLoading(true);
     setError(false);
 
     const valid = await onAuthenticate(token.trim());
     if (!valid) {
+      const newCount = failCount + 1;
+      setFailCount(newCount);
       setError(true);
       setLoading(false);
+      if (newCount >= MAX_ATTEMPTS) {
+        startLockout();
+        setFailCount(0);
+      }
     }
   };
 
@@ -41,21 +75,30 @@ const AdminLogin = ({ onAuthenticate }: AdminLoginProps) => {
           }}
           placeholder="Enter admin token"
           autoFocus
-          className={`w-full bg-card border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-colors ${
+          disabled={locked}
+          className={`w-full bg-card border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
             error ? "border-destructive" : "border-border"
           }`}
         />
 
-        {error && (
-          <p className="text-destructive text-sm text-center">Invalid token</p>
+        {error && !locked && (
+          <p className="text-destructive text-sm text-center">
+            Invalid token{failCount > 0 && ` (${MAX_ATTEMPTS - failCount} attempts remaining)`}
+          </p>
+        )}
+
+        {locked && (
+          <p className="text-destructive text-sm text-center">
+            Too many failed attempts. Try again in {lockoutRemaining}s
+          </p>
         )}
 
         <button
           type="submit"
-          disabled={loading || !token.trim()}
+          disabled={loading || !token.trim() || locked}
           className="w-full bg-primary text-primary-foreground rounded-lg px-4 py-3 font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
         >
-          {loading ? "Verifying..." : "Enter"}
+          {loading ? "Verifying..." : locked ? `Locked (${lockoutRemaining}s)` : "Enter"}
         </button>
       </form>
     </div>

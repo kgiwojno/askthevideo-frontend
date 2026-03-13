@@ -100,7 +100,7 @@ The frontend went through three distinct phases:
 ### Admin Dashboard (`/admin`)
 | Feature | Description | Status |
 |---------|-------------|--------|
-| Token Auth | Token-based login, persisted in sessionStorage across reloads | Done |
+| Token Auth | Token-based login, persisted in sessionStorage across reloads, rate-limited (3 attempts / 30s lockout) | Done |
 | Real-time Metrics | Active sessions, CPU, RAM, uptime | Done |
 | Session Stats | Total queries, videos loaded, errors, alerts | Done |
 | User Stats | Total users, returning users, avg sessions/user, avg questions/user | Done |

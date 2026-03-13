@@ -38,8 +38,15 @@
 
 ## 2026-03-13
 
+### Features
+- **Admin login rate limiting** (`src/components/admin/AdminLogin.tsx`): After 3 failed login attempts, the form locks for 30 seconds with a visible countdown. Shows "X attempts remaining" warning after first failure. Deters brute-force attempts via the UI.
+- **Author credit in sidebar** (`src/components/app/AppSidebar.tsx`): Added "Built by Krzysztof Giwojno" with LinkedIn profile link below the "Powered by" footer.
+- **MIT License** (`LICENSE`): Added standard MIT License file.
+- **Demo modal scroll** (`src/components/app/DemoModal.tsx`): Content area now scrolls on small screens (`max-h-[70vh] overflow-y-auto`).
+
 ### Updates
 - **Updated demo questions** (`src/lib/demo-config.ts`): Renamed "Technical Details" to "Technical Concepts". Added "Compare Neurons" (compare how both videos explain what a neuron does) and "Metadata" (give me info on the videos). Total demo questions: 7.
+- **Updated README** (`README.md`): Added Author, Related Repositories, AI Assistance, and License sections. Removed unused tech stack entries (React Hook Form, Zod, Recharts). Fixed `/api/status` method. Updated project structure listing.
 
 ## 2026-03-12
 
