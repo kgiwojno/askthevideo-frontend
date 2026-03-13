@@ -66,7 +66,7 @@ export const DEMO_QUESTIONS: DemoQuestion[] = [
     question: "What are the main key points discussed in this video?",
   },
   {
-    label: "Technical Details",
+    label: "Technical Concepts",
     question: "What technical concepts or tools are mentioned?",
   },
   {
@@ -74,7 +74,15 @@ export const DEMO_QUESTIONS: DemoQuestion[] = [
     question: "What are the most important moments to watch?",
   },
   {
+    label: "Compare Neurons",
+    question: "Compare how both videos explain what a neuron does",
+  },
+  {
     label: "Compare",
     question: "Compare what the selected videos say about this topic",
+  },
+  {
+    label: "Metadata",
+    question: "Give me info on the videos",
   },
 ];

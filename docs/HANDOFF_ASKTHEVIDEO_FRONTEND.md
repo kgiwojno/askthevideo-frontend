@@ -201,7 +201,7 @@ The frontend went through three distinct phases:
 - **Free tier limits**: 5 videos, 10 questions per session
 - **Admin auto-refresh**: Every 30 seconds
 - **Retry logic**: 2 retries with exponential backoff (1s, 2s delays)
-- **Demo shortcuts**: 10 preset videos, 5 preset questions
+- **Demo shortcuts**: 10 preset videos, 7 preset questions
 
 ---
 
