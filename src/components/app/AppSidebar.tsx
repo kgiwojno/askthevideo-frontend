@@ -259,6 +259,17 @@ const AppSidebar = ({
             <br />
             LangChain · LangGraph · Koyeb
           </p>
+          <p className="text-[11px] text-muted-foreground text-center mt-1">
+            Built by{" "}
+            <a
+              href="https://www.linkedin.com/in/kgiwojno/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-foreground hover:text-primary transition-colors"
+            >
+              Krzysztof Giwojno
+            </a>
+          </p>
         </div>
       </div>
     </aside>
