@@ -1,6 +1,16 @@
 # AskTheVideo — Frontend
 
+**Author:** Krzysztof Giwojno
+
 React frontend for [AskTheVideo](https://github.com/kgiwojno/askthevideo), an AI-powered app that lets you ask questions about YouTube videos and get intelligent, context-aware answers.
+
+## Related Repositories
+
+| Repository | Description |
+|------------|-------------|
+| **[askthevideo](https://github.com/kgiwojno/askthevideo)** | Backend + API |
+| **[askthevideo-frontend](https://github.com/kgiwojno/askthevideo-frontend)** | React frontend (this repo) |
+| **[askthevideo-landing-page](https://github.com/kgiwojno/askthevideo-landing-page)** | Landing page |
 
 ## Tech Stack
 
@@ -11,8 +21,6 @@ React frontend for [AskTheVideo](https://github.com/kgiwojno/askthevideo), an AI
 - **Framer Motion** — animations
 - **React Router** — client-side routing
 - **TanStack React Query** — server state management
-- **React Hook Form** + **Zod** — form handling & validation
-- **Recharts** — admin dashboard charts
 
 ## Features
 
@@ -33,16 +41,17 @@ React frontend for [AskTheVideo](https://github.com/kgiwojno/askthevideo), an AI
 src/
 ├── pages/                 # Route pages (Index, Admin, NotFound)
 ├── components/
-│   ├── app/               # App-specific components (ChatArea, AppSidebar, etc.)
-│   ├── admin/             # Admin dashboard components
+│   ├── app/               # App components (ChatArea, AppSidebar, DemoModal, ConnectionStatus)
+│   ├── admin/             # Admin dashboard (AdminDashboard, EventLog, MetricCard, AdminLogin)
 │   ├── ui/                # shadcn/ui base components
 │   └── ErrorBoundary.tsx  # Crash recovery UI
 ├── lib/
 │   ├── api.ts             # API client, SSE streaming, retry logic, timing monitor
 │   ├── admin-api.ts       # Admin auth & metrics API
-│   └── demo-config.ts     # Demo presets (videos & questions)
+│   ├── demo-config.ts     # Demo presets (videos & questions)
+│   └── utils.ts           # Shared utilities
 ├── hooks/                 # Custom hooks (speech, mobile detection, toast)
-├── types/                 # TypeScript interfaces (Video, ChatMessage, Limits)
+├── types/                 # TypeScript interfaces (app types, admin types)
 └── test/                  # Vitest test setup
 
 docs/                      # All project documentation
@@ -122,7 +131,7 @@ npm run test:watch
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/api/status` | Get session limits |
+| `GET` | `/api/status` | Get session limits |
 | `POST` | `/api/videos` | Load a video |
 | `GET` | `/api/videos` | List loaded videos |
 | `DELETE` | `/api/videos/:id` | Remove a video |
@@ -145,6 +154,19 @@ All API calls log timing to the browser console:
 
 Full timing history is available in DevTools via `window.__apiTimings`.
 
-## Related
+## AI Assistance
 
-- **Backend**: [kgiwojno/askthevideo](https://github.com/kgiwojno/askthevideo)
+This project was built with assistance from AI development tools:
+
+- **Claude** (Anthropic) — code generation, debugging,
+  and documentation cleanup via Claude Code and claude.ai
+- **Lovable** — application scaffolding and UI development
+
+All architectural decisions, feature design, and final implementation
+reflect the author's judgment. All code has been reviewed and tested.
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
