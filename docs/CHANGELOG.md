@@ -39,7 +39,7 @@
 ## 2026-03-13
 
 ### Features
-- **Admin login rate limiting** (`src/components/admin/AdminLogin.tsx`): After 3 failed login attempts, the form locks for 30 seconds with a visible countdown. Shows "X attempts remaining" warning after first failure. Deters brute-force attempts via the UI.
+- **Admin login rate limiting** (`src/components/admin/AdminLogin.tsx`): After 3 failed login attempts, the form locks for 30 seconds with a visible countdown. Shows "X attempts remaining" warning after first failure. Fail count and lockout expiry persisted in sessionStorage so refreshing the page doesn't bypass the lockout.
 - **Author credit in sidebar** (`src/components/app/AppSidebar.tsx`): Added "Built by Krzysztof Giwojno" with LinkedIn profile link below the "Powered by" footer.
 - **MIT License** (`LICENSE`): Added standard MIT License file.
 - **Demo modal scroll** (`src/components/app/DemoModal.tsx`): Content area now scrolls on small screens (`max-h-[70vh] overflow-y-auto`).
