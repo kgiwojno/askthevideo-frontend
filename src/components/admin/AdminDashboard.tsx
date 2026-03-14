@@ -33,6 +33,20 @@ const AdminDashboard = ({ token, onAuthError }: AdminDashboardProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>("");
+  const [versionInfo, setVersionInfo] = useState<{ commit: string; deploy: string } | null>(null);
+
+  useEffect(() => {
+    fetch("/health")
+      .then((res) => res.json())
+      .then((data) => {
+        const deploy = data.deployment_id || "—";
+        setVersionInfo({
+          commit: data.commit || "—",
+          deploy: deploy.length > 8 ? deploy.slice(0, 8) : deploy,
+        });
+      })
+      .catch(() => {});
+  }, []);
 
   const refresh = useCallback(async () => {
     try {
@@ -197,7 +211,8 @@ const AdminDashboard = ({ token, onAuthError }: AdminDashboardProps) => {
       {/* Footer */}
       <footer className="border-t border-border px-4 sm:px-6 py-3 text-center">
         <p className="text-xs text-muted-foreground">
-          Auto-refresh: 30s | Last updated: {lastUpdated || "—"}
+          Auto-refresh: 30s | Last: {lastUpdated || "—"}
+          {versionInfo && ` | commit: ${versionInfo.commit} | deploy: ${versionInfo.deploy}`}
         </p>
       </footer>
     </div>
