@@ -36,6 +36,11 @@
 - **Reorganised documentation into `docs/`**: Moved all project docs (`CHANGELOG.md`, `FUTURE_IMPROVEMENTS.md`, `HANDOFF_ASKTHEVIDEO_FRONTEND.md`) into `docs/`. Moved original specs into `docs/spec/`. Moved Streamlit prototype and draft specs from `tmp/` into `docs/spec/streamlit/`. Removed old `streamlit/` and `tmp/` directories. Created `docs/README.md` as documentation index.
 - **Deleted stale files**: Removed `bun.lock`, `bun.lockb`, `.DS_Store`, and `.README.md.swp`.
 
+## 2026-03-14
+
+### Bug Fixes
+- **Favicon meta tag** (`index.html`): Removed incorrect `sizes="32x32"` from `.ico` link — `.ico` is a multi-size container and should not specify a single size.
+
 ## 2026-03-13
 
 ### Features
