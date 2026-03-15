@@ -94,7 +94,7 @@ The frontend went through three distinct phases:
 | Voice Output | Speaker icon to read AI answers aloud via SpeechSynthesis | Done |
 | Demo Mode | Press `D` for keyboard shortcuts to quickly load preset videos/questions | Done |
 | Mobile Responsive | Drawer sidebar, touch-friendly UI, responsive breakpoints | Done |
-| Welcome Screen | Animated landing with clickable example prompts and step indicators | Done |
+| Welcome Screen | Animated landing with clickable example prompts, step indicators, and link to landing page | Done |
 | Offline Handling | Connection status banner with retry logic (exponential backoff) | Done |
 
 ### Admin Dashboard (`/admin`)
@@ -109,6 +109,7 @@ The frontend went through three distinct phases:
 | Event Log | Enriched log with filter tabs, sortable latency, tokens, cost, summary bar | Done |
 | External Links | Quick access to LangSmith, Koyeb, GA, Discord | Done |
 | Auto-refresh | Polls metrics every 30 seconds | Done |
+| Version Info | Footer shows commit hash and deployment ID from `/health` endpoint | Done |
 
 ### Session Persistence
 | Feature | Description | Status |
@@ -127,6 +128,13 @@ The frontend went through three distinct phases:
 | Retry Logic | Exponential backoff (2 retries, 1s base delay) | Done |
 | Thumbnail Fallback | YouTube icon shown when thumbnail fails to load | Done |
 | Input Field Identity | Question input has `autoComplete="off"`, `name`, `id`, `aria-label` to prevent password manager misdetection | Done |
+
+### SEO & Cross-linking
+| Feature | Description | Status |
+|---------|-------------|--------|
+| Meta Tags | Title, description, canonical, og:url, og:site_name, robots | Done |
+| Logo Link | Sidebar logo links to askthevideo.com landing page (new tab) | Done |
+| Welcome Link | "Learn more about AskTheVideo →" on welcome screen | Done |
 
 ---
 

@@ -36,10 +36,20 @@
 - **Reorganised documentation into `docs/`**: Moved all project docs (`CHANGELOG.md`, `FUTURE_IMPROVEMENTS.md`, `HANDOFF_ASKTHEVIDEO_FRONTEND.md`) into `docs/`. Moved original specs into `docs/spec/`. Moved Streamlit prototype and draft specs from `tmp/` into `docs/spec/streamlit/`. Removed old `streamlit/` and `tmp/` directories. Created `docs/README.md` as documentation index.
 - **Deleted stale files**: Removed `bun.lock`, `bun.lockb`, `.DS_Store`, and `.README.md.swp`.
 
-## 2026-03-14
+## 2026-03-15
+
+### Features
+- **Landing page links** (`src/components/app/AppSidebar.tsx`, `src/components/app/ChatArea.tsx`): Logo in sidebar now links to askthevideo.com (opens in new tab, no visual change). Welcome screen has "Learn more about AskTheVideo →" link below the subtitle.
+- **Admin version info** (`src/components/admin/AdminDashboard.tsx`): Footer shows commit hash and deployment ID fetched from `/health` endpoint.
+- **Deploy script** (`deploy.sh`): Interactive deploy script with menu: commit only, build & copy, commit + build, or full pipeline with Koyeb deploy. Added to `.gitignore`.
+
+### Updates
+- **SEO improvements** (`index.html`): Updated title to "AskTheVideo App — AI Video Q&A", rewrote meta description, added canonical URL, `og:url`, `og:site_name`, and `robots` meta tag.
 
 ### Bug Fixes
 - **Favicon meta tag** (`index.html`): Removed incorrect `sizes="32x32"` from `.ico` link — `.ico` is a multi-size container and should not specify a single size.
+
+## 2026-03-14
 
 ## 2026-03-13
 
