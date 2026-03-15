@@ -73,9 +73,19 @@ const WelcomeScreen = ({ onSelectPrompt }: { onSelectPrompt: (text: string) => v
         <h2 className="text-2xl font-bold text-foreground mb-3 tracking-tight">
           Welcome to AskTheVideo
         </h2>
-        <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+        <p className="text-sm text-muted-foreground leading-relaxed mb-2">
           Paste a YouTube URL in the sidebar to get started. You can ask questions,
           get summaries, compare videos, and more.
+        </p>
+        <p className="text-xs text-muted-foreground mt-1 mb-5">
+          <a
+            href="https://askthevideo.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="no-underline hover:underline text-muted-foreground"
+          >
+            Learn more about AskTheVideo →
+          </a>
         </p>
         <div className="flex items-center justify-center gap-3 mb-6 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5"><span className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold">1</span>Paste URL</span>

@@ -52,8 +52,16 @@ const AppSidebar = ({
       {/* Logo */}
       <div className="p-5 pb-3">
         <h1 className="text-xl font-bold tracking-tight flex items-center gap-2">
-          <span className="text-2xl">🎬</span>
-          <span className="text-foreground">AskTheVideo</span>
+          <a
+            href="https://askthevideo.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 no-underline text-inherit"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <span className="text-2xl">🎬</span>
+            <span className="text-foreground">AskTheVideo</span>
+          </a>
         </h1>
       </div>
 
