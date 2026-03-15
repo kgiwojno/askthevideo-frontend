@@ -77,7 +77,7 @@ const WelcomeScreen = ({ onSelectPrompt }: { onSelectPrompt: (text: string) => v
           Paste a YouTube URL in the sidebar to get started. You can ask questions,
           get summaries, compare videos, and more.
         </p>
-        <p className="text-xs text-muted-foreground mt-1 mb-5">
+        <p className="text-xs text-muted-foreground mt-1 mb-8">
           <a
             href="https://askthevideo.com"
             target="_blank"
