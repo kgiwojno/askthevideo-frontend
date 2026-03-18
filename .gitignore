@@ -15,7 +15,7 @@ tmp/
 bun.lock
 bun.lockb
 .env*
-deploy.sh
+commit-and-deploy.sh
 
 # Editor directories and files
 .vscode/*

@@ -11,7 +11,7 @@ _All critical items resolved._
 _All worth-fixing items resolved._
 
 ### Cleanup
-- **Unused shadcn/ui components**: ~40+ UI components installed but never used (accordion, calendar, carousel, checkbox, etc.). Adds to bundle size.
+- **Unused shadcn/ui components**: ~40+ UI components installed but never used (accordion, calendar, carousel, checkbox, etc.). File clutter only — Vite tree-shakes them from the production bundle.
 - **TypeScript strict mode disabled**: `tsconfig.json` has `noImplicitAny`, `strictNullChecks`, `noUnusedLocals`, `noUnusedParameters` all set to `false`.
 - **ESLint `no-unused-vars` disabled**: `eslint.config.js:23` — unused variables won't be detected.
 - **No real tests**: `src/test/example.test.ts` only contains a dummy test. No coverage for API, components, or app logic.
@@ -22,7 +22,7 @@ _All minor items reviewed and deferred — no action needed._
 
 - **Hardcoded Google Analytics ID**: `index.html:26` — deferred, GA ID is always the same since frontend is bundled into the backend Docker container.
 - **Hardcoded external URLs in admin**: `AdminDashboard.tsx` — deferred, these are stable service links only visible in admin panel.
-- **Legacy directories**: `streamlit/` and `docs/` — kept intentionally to preserve project history from earlier design phases.
+- **Legacy directories**: `docs/spec/streamlit/` — kept intentionally to preserve project history from earlier design phases.
 
 ## Done ✅
 

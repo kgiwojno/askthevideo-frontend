@@ -57,12 +57,33 @@ export interface AdminUserStats {
   avg_questions_per_user: number;
 }
 
+export interface AdminVideo {
+  video_id: string;
+  title: string;
+  channel: string;
+  duration_seconds: number;
+  duration_display: string;
+  language: string;
+  is_generated: boolean;
+  chunk_count: number;
+  thumbnail_url: string;
+  first_loaded_at: string;
+  last_loaded_at: string;
+  load_count: number;
+  fail_count: number;
+  last_error: string | null;
+  last_error_at: string | null;
+  available_languages: string[] | null;
+  environment: string;
+}
+
 export interface AdminMetrics {
   realtime: AdminRealtimeMetrics;
   sessions: AdminSessionStats;
   cost: AdminCostMetrics;
   pinecone: AdminPineconeStats;
   users: AdminUserStats;
+  videos: AdminVideo[];
   events: AdminEvent[];
   last_updated: string;
 }

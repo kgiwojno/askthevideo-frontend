@@ -36,6 +36,14 @@
 - **Reorganised documentation into `docs/`**: Moved all project docs (`CHANGELOG.md`, `FUTURE_IMPROVEMENTS.md`, `HANDOFF_ASKTHEVIDEO_FRONTEND.md`) into `docs/`. Moved original specs into `docs/spec/`. Moved Streamlit prototype and draft specs from `tmp/` into `docs/spec/streamlit/`. Removed old `streamlit/` and `tmp/` directories. Created `docs/README.md` as documentation index.
 - **Deleted stale files**: Removed `bun.lock`, `bun.lockb`, `.DS_Store`, and `.README.md.swp`.
 
+## 2026-03-18
+
+### Features
+- **Admin Videos table** (`src/components/admin/VideoTable.tsx`, `src/components/admin/AdminDashboard.tsx`, `src/types/admin.ts`): New "Videos" section in admin dashboard showing all loaded videos with clickable video ID (links to YouTube), title, channel, duration, language (with auto-generated badge), chunks, load/fail counts, last error, available languages, and relative last-loaded time. Sorted by most recent. Fail-only rows highlighted in red. Backward-compatible defaults for `videos` and `users` fields. Added `AdminVideo` type.
+
+### Housekeeping
+- **Archived completed docs** (`docs/archive/`): Moved `HANDOFF_ASKTHEVIDEO_FRONTEND.md`, `FUTURE_IMPROVEMENTS.md`, and docs `README.md` to `docs/archive/`. Updated main README project structure.
+
 ## 2026-03-15
 
 ### Features

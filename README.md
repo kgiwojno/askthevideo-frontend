@@ -55,9 +55,8 @@ src/
 └── test/                  # Vitest test setup
 
 docs/                      # All project documentation
-├── HANDOFF_*.md           # Presentation handoff document
-├── CHANGELOG.md           # Change log
-├── FUTURE_IMPROVEMENTS.md # Tracked issues & improvements
+├── CHANGELOG.md           # Active change log
+├── archive/               # Completed docs (handoff, improvements)
 └── spec/                  # Original planning specs & Streamlit prototype
 ```
 

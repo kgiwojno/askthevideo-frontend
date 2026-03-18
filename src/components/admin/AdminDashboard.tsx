@@ -4,6 +4,7 @@ import { AdminMetrics } from "@/types/admin";
 import { fetchAdminMetrics } from "@/lib/admin-api";
 import MetricCard from "./MetricCard";
 import EventLog from "./EventLog";
+import VideoTable from "./VideoTable";
 
 interface AdminDashboardProps {
   token: string;
@@ -92,7 +93,15 @@ const AdminDashboard = ({ token, onAuthError }: AdminDashboardProps) => {
 
   if (!metrics) return null;
 
-  const { realtime, sessions, cost, pinecone, users, events } = metrics;
+  const {
+    realtime,
+    sessions,
+    cost,
+    pinecone,
+    users = { total_users: 0, returning_users: 0, avg_sessions_per_user: 0, avg_questions_per_user: 0 },
+    videos = [],
+    events,
+  } = metrics;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -183,12 +192,17 @@ const AdminDashboard = ({ token, onAuthError }: AdminDashboardProps) => {
           </div>
         </section>
 
-        {/* Row 6: Event log */}
+        {/* Row 6: Videos */}
+        <section>
+          <VideoTable videos={videos} />
+        </section>
+
+        {/* Row 7: Event log */}
         <section>
           <EventLog events={events} />
         </section>
 
-        {/* Row 7: External links */}
+        {/* Row 8: External links */}
         <section>
           <h2 className="text-xs uppercase tracking-wider text-muted-foreground mb-3">External Dashboards</h2>
           <div className="flex flex-wrap gap-2">

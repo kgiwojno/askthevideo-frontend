@@ -2,16 +2,17 @@
 
 ## Overview
 
-All project documentation lives in `docs/`. The folder is split into two layers: **project documentation** (created during and after the build) and **original planning specs** (created before the build, kept as reference).
+All project documentation lives in `docs/`. Active documents are in the root, completed/historical documents are in `archive/`, and original planning specs are in `spec/`.
 
 ## File Map
 
 ```
 docs/
-├── README.md                           # This file — explains the docs structure
-├── HANDOFF_ASKTHEVIDEO_FRONTEND.md     # Master handoff document for presentations
-├── CHANGELOG.md                        # All changes made during development
-├── FUTURE_IMPROVEMENTS.md              # Tracked issues, completed items, deferred decisions
+├── README.md                           # This file
+├── CHANGELOG.md                        # Active — all changes by date
+├── archive/                            # Completed documents (no longer updated)
+│   ├── HANDOFF_ASKTHEVIDEO_FRONTEND.md # Project handoff for presentations
+│   └── FUTURE_IMPROVEMENTS.md         # Tracked issues (all resolved or deferred)
 └── spec/                               # Original planning documents (pre-build)
     ├── REACT_FRONTEND_SPEC.md          # Frontend API integration spec
     ├── ADMIN_PANEL_FRONTEND_SPEC.md    # Admin dashboard spec
@@ -30,17 +31,22 @@ docs/
 
 ## Document Descriptions
 
-### Project Documentation (root of `docs/`)
+### Active (`docs/`)
+
+| File | Purpose | Audience |
+|------|---------|----------|
+| **CHANGELOG.md** | Detailed log of all changes made during development, grouped by date and category. | Developers, reviewers |
+
+### Archive (`docs/archive/`)
 
 | File | Purpose | Audience |
 |------|---------|----------|
 | **HANDOFF_ASKTHEVIDEO_FRONTEND.md** | Master document covering architecture, development journey, features, deviations from specs, what worked/didn't, technical debt, and presentation talking points. | Presentation prep, stakeholders |
-| **CHANGELOG.md** | Detailed log of all changes made during development, grouped by category (features, bug fixes, housekeeping, documentation). | Developers, reviewers |
-| **FUTURE_IMPROVEMENTS.md** | Tracked issues found during project review. Each item is categorised (Critical, Worth Fixing, Cleanup, Minor) with current status (resolved or deferred with rationale). | Future development, grading |
+| **FUTURE_IMPROVEMENTS.md** | Tracked issues found during project review. Each item is categorised (Critical, Worth Fixing, Cleanup, Minor) with current status (all resolved or deferred with rationale). | Future development, grading |
 
 ### Original Planning Specs (`docs/spec/`)
 
-These are the **pre-build planning documents** — the original specifications written before code was implemented. They are kept as reference to show what was planned vs what was built. The differences are documented in `HANDOFF_ASKTHEVIDEO_FRONTEND.md` (Section 4: Deviations).
+These are the **pre-build planning documents** — the original specifications written before code was implemented. They are kept as reference to show what was planned vs what was built. The differences are documented in `archive/HANDOFF_ASKTHEVIDEO_FRONTEND.md` (Section 4: Deviations).
 
 | File | What it defined |
 |------|----------------|
@@ -50,8 +56,8 @@ These are the **pre-build planning documents** — the original specifications w
 
 ## How to Use
 
-- **Preparing a presentation?** Read `HANDOFF_ASKTHEVIDEO_FRONTEND.md` — it has everything in one place, including a recommended demo flow.
-- **Reviewing what changed from the plan?** Read Section 4 of the handoff doc — all deviations are documented with rationale.
-- **Want to understand the original vision?** Read `docs/spec/REACT_FRONTEND_SPEC.md` and `docs/spec/ADMIN_PANEL_FRONTEND_SPEC.md`.
-- **Looking for open issues?** Read `FUTURE_IMPROVEMENTS.md` — all items are categorised and tracked.
 - **Checking what was built?** Read `CHANGELOG.md` for a detailed change log.
+- **Preparing a presentation?** Read `archive/HANDOFF_ASKTHEVIDEO_FRONTEND.md` — it has everything in one place, including a recommended demo flow.
+- **Reviewing what changed from the plan?** Read Section 4 of the handoff doc — all deviations are documented with rationale.
+- **Want to understand the original vision?** Read `spec/REACT_FRONTEND_SPEC.md` and `spec/ADMIN_PANEL_FRONTEND_SPEC.md`.
+- **Looking for tracked issues?** Read `archive/FUTURE_IMPROVEMENTS.md` — all items are categorised and resolved or deferred.
