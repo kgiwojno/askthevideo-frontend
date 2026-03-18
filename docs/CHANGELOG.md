@@ -41,6 +41,9 @@
 ### Features
 - **Admin Videos table** (`src/components/admin/VideoTable.tsx`, `src/components/admin/AdminDashboard.tsx`, `src/types/admin.ts`): New "Videos" section in admin dashboard showing all loaded videos with clickable video ID (links to YouTube), title, channel, duration, language (with auto-generated badge), chunks, load/fail counts, last error, available languages, and relative last-loaded time. Sorted by most recent. Fail-only rows highlighted in red. Backward-compatible defaults for `videos` and `users` fields. Added `AdminVideo` type.
 
+### Updates
+- **Renamed and improved deploy script** (`commit-and-deploy.sh`): Renamed from `deploy.sh`. When committing backend (option 4), now detects non-frontend changes and asks for confirmation before including them. Updated `.gitignore`.
+
 ### Housekeeping
 - **Archived completed docs** (`docs/archive/`): Moved `HANDOFF_ASKTHEVIDEO_FRONTEND.md`, `FUTURE_IMPROVEMENTS.md`, and docs `README.md` to `docs/archive/`. Updated main README project structure.
 
